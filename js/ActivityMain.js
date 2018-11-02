@@ -7,6 +7,14 @@ var touch = new Touch(320, 250, 15, 15);
 var puntos = 0;
 var map = new Map();
 
+var Direction = {
+	UP : 1,
+	DOWN : 2,
+	LEFT : 3,
+	RIGHT : 4,
+	DEFAULT : 0
+};
+
 var comecocos = {
 	x: 420,
 	y: 705,
@@ -18,16 +26,16 @@ var comecocos = {
 		ctx.fillStyle = "rgb(255,255,0)";
 		ctx.beginPath();
 		switch (this.direccion) {
-			case "UP":
+			case Direction.UP:
 				ctx.arc(this.x, this.y, this.radio, 1.25 * Math.PI, Math.PI * 1.75, true);
 				break;
-			case "DOWN":
+			case Direction.DOWN:
 				ctx.arc(this.x, this.y, this.radio, Math.PI / 4, Math.PI / 1.3, true);
 				break;
-			case "LEFT":
+			case Direction.LEFT:
 				ctx.arc(this.x, this.y, this.radio, Math.PI / 1.4, 1.25 * Math.PI, true);
 				break;
-			case "RIGHT":
+			case Direction.RIGHT:
 				ctx.arc(this.x, this.y, this.radio, 1.75 * Math.PI, Math.PI / 4, true);
 				break;
 			default:
@@ -44,8 +52,8 @@ var fantasmaRojo = {
 	vx: 0,
 	vy: 0,
 	color: "#F00",
-	direccion: "",
-	direccionCorrecta: ""
+	direccion: Direction.DEFAULT,
+	direccionCorrecta: Direction.DEFAULT
 };
 var fantasmaNaranja = {
 	x: 420,
@@ -53,7 +61,7 @@ var fantasmaNaranja = {
 	vx: 0,
 	vy: 0,
 	color: "#F90",
-	direccion: "UP"
+	direccion: Direction.DEFAULT
 };
 var fantasmaVerde = {
 	x: 420,
@@ -61,8 +69,8 @@ var fantasmaVerde = {
 	vx: 0,
 	vy: 0,
 	color: "#0F0",
-	direccion: "",
-	direccionCorrecta: ""
+	direccion: Direction.DEFAULT,
+	direccionCorrecta: Direction.DEFAULT
 };
 var fantasmaRosa = {
 	x: 420,
@@ -70,7 +78,7 @@ var fantasmaRosa = {
 	vx: 0,
 	vy: 0,
 	color: "#F99",
-	direccion: "UP"
+	direccion: Direction.DEFAULT
 };
 function drawFantasma(x, y, color) {
 	//ctx.fillStyle = "black";
@@ -121,19 +129,19 @@ function limite(direccion, horizontal, vertical) {
 	var topey = 0;
 	var topex = 0;
 	switch (direccion) {
-		case "UP":
+		case Direction.UP:
 			topey = -16;
 			topex = 0;
 			break;
-		case "DOWN":
+		case Direction.DOWN:
 			topey = 15;
 			topex = 0;
 			break;
-		case "RIGHT":
+		case Direction.RIGHT:
 			topey = 0;
 			topex = 15;
 			break;
-		case "LEFT":
+		case Direction.LEFT:
 			topey = 0;
 			topex = -16;
 			break;
@@ -150,12 +158,12 @@ function limite(direccion, horizontal, vertical) {
 }
 
 function estaCentrado(direccion, horizontal, vertical) {
-	if (direccion === "UP" || direccion === "DOWN") {
+	if (direccion === Direction.UP || direccion === Direction.DOWN) {
 		if (Math.trunc((horizontal) / 30) * 30 + 15 === horizontal) {
 			return true;
 		}
 	}
-	if (direccion === "RIGHT" || direccion === "LEFT") {
+	if (direccion === Direction.RIGHT || direccion === Direction.LEFT) {
 		if (Math.trunc((vertical) / 30) * 30 + 15 === vertical) {
 			return true;
 		}
@@ -168,54 +176,54 @@ function perserguirComecocos(horizontal, vertical) {
 	recorridoy = vertical - comecocos.y;
 	if (Math.abs(recorridox) >= Math.abs(recorridoy)) {
 		if (horizontal <= comecocos.x) {
-			direcciones[0] = "RIGHT";
-			if (limite("RIGHT", horizontal, vertical)) {
-				direcciones[1] = "RIGHT";
+			direcciones[0] = Direction.RIGHT;
+			if (limite(Direction.RIGHT, horizontal, vertical)) {
+				direcciones[1] = Direction.RIGHT;
 			} else {
-				if (vertical >= comecocos.y && limite("UP", horizontal, vertical)) {
-					direcciones[1] = "UP";
-				} else if (limite("DOWN", horizontal, vertical)) {
-					direcciones[1] = "DOWN";
+				if (vertical >= comecocos.y && limite(Direction.UP, horizontal, vertical)) {
+					direcciones[1] = Direction.UP;
+				} else if (limite(Direction.DOWN, horizontal, vertical)) {
+					direcciones[1] = Direction.DOWN;
 				} else {
-					direcciones[1] = "LEFT";
+					direcciones[1] = Direction.LEFT;
 				}
 			}
 		} else {
-			direcciones[0] = "LEFT";
-			if (limite("LEFT", horizontal, vertical)) {
-				direcciones[1] = "LEFT";
+			direcciones[0] = Direction.LEFT;
+			if (limite(Direction.LEFT, horizontal, vertical)) {
+				direcciones[1] = Direction.LEFT;
 			} else {
-				if (vertical >= comecocos.y && limite("UP", horizontal, vertical)) {
-					direcciones[1] = "UP";
-				} else if (limite("DOWN", horizontal, vertical)) {
-					direcciones[1] = "DOWN";
+				if (vertical >= comecocos.y && limite(Direction.UP, horizontal, vertical)) {
+					direcciones[1] = Direction.UP;
+				} else if (limite(Direction.DOWN, horizontal, vertical)) {
+					direcciones[1] = Direction.DOWN;
 				} else {
-					direcciones[1] = "LEFT";
+					direcciones[1] = Direction.LEFT;
 				}
 			}
 
 		}
 	} else {
 		if (vertical >= comecocos.y) {
-			direcciones[0] = "UP";
-			if (limite("UP", horizontal, vertical)) {
-				direcciones[1] = "UP";
+			direcciones[0] = Direction.UP;
+			if (limite(Direction.UP, horizontal, vertical)) {
+				direcciones[1] = Direction.UP;
 			} else {
-				if (horizontal <= comecocos.x && limite("RIGHT", horizontal, vertical)) {
-					direcciones[1] = "RIGHT";
+				if (horizontal <= comecocos.x && limite(Direction.RIGHT, horizontal, vertical)) {
+					direcciones[1] = Direction.RIGHT;
 				} else {
-					direcciones[1] = "LEFT";
+					direcciones[1] = Direction.LEFT;
 				}
 			}
 		} else {
-			direcciones[0] = "DOWN";
-			if (limite("DOWN", horizontal, vertical)) {
-				direcciones[1] = "DOWN";
+			direcciones[0] = Direction.DOWN;
+			if (limite(Direction.DOWN, horizontal, vertical)) {
+				direcciones[1] = Direction.DOWN;
 			} else {
-				if (horizontal <= comecocos.x && limite("RIGHT", horizontal, vertical)) {
-					direcciones[1] = "RIGHT";
+				if (horizontal <= comecocos.x && limite(Direction.RIGHT, horizontal, vertical)) {
+					direcciones[1] = Direction.RIGHT;
 				} else {
-					direcciones[1] = "LEFT";
+					direcciones[1] = Direction.LEFT;
 				}
 			}
 		}
@@ -230,19 +238,19 @@ function moverFantasmaRojo(color) {
 		fantasmaRojo.direccionCorrecta = arrayDirecciones[0];
 	}
 	switch (fantasmaRojo.direccion) {
-		case "UP":
+		case Direction.UP:
 			fantasmaRojo.vx = 0;
 			fantasmaRojo.vy = -1;
 			break;
-		case "DOWN":
+		case Direction.DOWN:
 			fantasmaRojo.vx = 0;
 			fantasmaRojo.vy = 1;
 			break;
-		case "RIGHT":
+		case Direction.RIGHT:
 			fantasmaRojo.vx = 1;
 			fantasmaRojo.vy = 0;
 			break;
-		case "LEFT":
+		case Direction.LEFT:
 			fantasmaRojo.vx = -1;
 			fantasmaRojo.vy = 0;
 			break;
@@ -258,19 +266,19 @@ function moverFantasmaVerde() {
 		fantasmaVerde.direccionCorrecta = arrayDirecciones[0];
 	}
 	switch (fantasmaVerde.direccion) {
-		case "UP":
+		case Direction.UP:
 			fantasmaVerde.vx = 0;
 			fantasmaVerde.vy = -1;
 			break;
-		case "DOWN":
+		case Direction.DOWN:
 			fantasmaVerde.vx = 0;
 			fantasmaVerde.vy = 1;
 			break;
-		case "RIGHT":
+		case Direction.RIGHT:
 			fantasmaVerde.vx = 1;
 			fantasmaVerde.vy = 0;
 			break;
-		case "LEFT":
+		case Direction.LEFT:
 			fantasmaVerde.vx = -1;
 			fantasmaVerde.vy = 0;
 			break;
@@ -289,16 +297,16 @@ function direccionAleatoria(horizontal, vertical) {
 		var rd = numeroAleatorio();
 		switch (rd) {
 			case 0:
-				direccion = "UP";
+				direccion = Direction.UP;
 				break;
 			case 1:
-				direccion = "DOWN";
+				direccion = Direction.DOWN;
 				break;
 			case 2:
-				direccion = "RIGHT";
+				direccion = Direction.RIGHT;
 				break;
 			case 3:
-				direccion = "LEFT";
+				direccion = Direction.LEFT;
 				break;
 		}
 	} while (!limite(direccion, horizontal, vertical));
@@ -307,20 +315,20 @@ function direccionAleatoria(horizontal, vertical) {
 function nuevaDireccionNaranja(direccion, horizontal, vertical) {
 	var dirContraria;
 	switch (direccion) {
-		case "UP":
-			dirContraria = "DOWN";
+		case Direction.UP:
+			dirContraria = Direction.DOWN;
 			break;
-		case "DOWN":
-			dirContraria = "UP";
+		case Direction.DOWN:
+			dirContraria = Direction.UP;
 			break;
-		case "RIGHT":
-			dirContraria = "LEFT";
+		case Direction.RIGHT:
+			dirContraria = Direction.LEFT;
 			break;
-		case "LEFT":
-			dirContraria = "RIGHT";
+		case Direction.LEFT:
+			dirContraria = Direction.RIGHT;
 			break;
 		default:
-			dirContraria = "NOTHING";
+			dirContraria = Direction.DEFAULT;
 			break;
 	}
 	do {
@@ -329,13 +337,13 @@ function nuevaDireccionNaranja(direccion, horizontal, vertical) {
 	return direccion;
 }
 function moverFantasmaNaranja() {
-	if (fantasmaNaranja.direccion === "LEFT" || fantasmaNaranja.direccion === "RIGHT") {
-		if (limite("UP", fantasmaNaranja.x, fantasmaNaranja.y) ||
-				limite("DOWN", fantasmaNaranja.x, fantasmaNaranja.y)) {
+	if (fantasmaNaranja.direccion === Direction.LEFT || fantasmaNaranja.direccion === Direction.RIGHT) {
+		if (limite(Direction.UP, fantasmaNaranja.x, fantasmaNaranja.y) ||
+				limite(Direction.DOWN, fantasmaNaranja.x, fantasmaNaranja.y)) {
 			fantasmaNaranja.direccion = nuevaDireccionNaranja(fantasmaNaranja.direccion, fantasmaNaranja.x, fantasmaNaranja.y);
 		}
-	} else if (limite("LEFT", fantasmaNaranja.x, fantasmaNaranja.y) ||
-			limite("RIGHT", fantasmaNaranja.x, fantasmaNaranja.y)) {
+	} else if (limite(Direction.LEFT, fantasmaNaranja.x, fantasmaNaranja.y) ||
+			limite(Direction.RIGHT, fantasmaNaranja.x, fantasmaNaranja.y)) {
 		fantasmaNaranja.direccion = nuevaDireccionNaranja(fantasmaNaranja.direccion, fantasmaNaranja.x, fantasmaNaranja.y);
 	} else if (!limite(fantasmaNaranja.direccion, fantasmaNaranja.x, fantasmaNaranja.y)) {
 		fantasmaNaranja.direccion = nuevaDireccionNaranja(fantasmaNaranja.direccion, fantasmaNaranja.x, fantasmaNaranja.y);
@@ -347,19 +355,19 @@ function moverFantasmaNaranja() {
 		fantasmaNaranja.x = 0;
 	}
 	switch (fantasmaNaranja.direccion) {
-		case "UP":
+		case Direction.UP:
 			fantasmaNaranja.vx = 0;
 			fantasmaNaranja.vy = -1;
 			break;
-		case "DOWN":
+		case Direction.DOWN:
 			fantasmaNaranja.vx = 0;
 			fantasmaNaranja.vy = 1;
 			break;
-		case "RIGHT":
+		case Direction.RIGHT:
 			fantasmaNaranja.vx = 1;
 			fantasmaNaranja.vy = 0;
 			break;
-		case "LEFT":
+		case Direction.LEFT:
 			fantasmaNaranja.vx = -1;
 			fantasmaNaranja.vy = 0;
 			break;
@@ -368,13 +376,13 @@ function moverFantasmaNaranja() {
 	fantasmaNaranja.y += fantasmaNaranja.vy * 5;
 }
 function moverFantasmaRosa() {
-	if (fantasmaRosa.direccion === "LEFT" || fantasmaRosa.direccion === "RIGHT") {
-		if (limite("UP", fantasmaRosa.x, fantasmaRosa.y) ||
-				limite("DOWN", fantasmaRosa.x, fantasmaRosa.y)) {
+	if (fantasmaRosa.direccion === Direction.LEFT || fantasmaRosa.direccion === Direction.RIGHT) {
+		if (limite(Direction.UP, fantasmaRosa.x, fantasmaRosa.y) ||
+				limite(Direction.DOWN, fantasmaRosa.x, fantasmaRosa.y)) {
 			fantasmaRosa.direccion = nuevaDireccionNaranja(fantasmaRosa.direccion, fantasmaRosa.x, fantasmaRosa.y);
 		}
-	} else if (limite("LEFT", fantasmaRosa.x, fantasmaRosa.y) ||
-			limite("RIGHT", fantasmaRosa.x, fantasmaRosa.y)) {
+	} else if (limite(Direction.LEFT, fantasmaRosa.x, fantasmaRosa.y) ||
+			limite(Direction.RIGHT, fantasmaRosa.x, fantasmaRosa.y)) {
 		fantasmaRosa.direccion = nuevaDireccionNaranja(fantasmaRosa.direccion, fantasmaRosa.x, fantasmaRosa.y);
 	} else if (!limite(fantasmaRosa.direccion, fantasmaRosa.x, fantasmaRosa.y)) {
 		fantasmaRosa.direccion = nuevaDireccionNaranja(fantasmaRosa.direccion, fantasmaRosa.x, fantasmaRosa.y);
@@ -386,19 +394,19 @@ function moverFantasmaRosa() {
 		fantasmaRosa.x = 0;
 	}
 	switch (fantasmaRosa.direccion) {
-		case "UP":
+		case Direction.UP:
 			fantasmaRosa.vx = 0;
 			fantasmaRosa.vy = -1;
 			break;
-		case "DOWN":
+		case Direction.DOWN:
 			fantasmaRosa.vx = 0;
 			fantasmaRosa.vy = 1;
 			break;
-		case "RIGHT":
+		case Direction.RIGHT:
 			fantasmaRosa.vx = 1;
 			fantasmaRosa.vy = 0;
 			break;
-		case "LEFT":
+		case Direction.LEFT:
 			fantasmaRosa.vx = -1;
 			fantasmaRosa.vy = 0;
 			break;
@@ -438,31 +446,31 @@ function accion() {
 	}
 	if (!pausa) {
 		if (tecla === KEY_DOWN) {
-			if (limite("DOWN", comecocos.x, comecocos.y)) {
+			if (limite(Direction.DOWN, comecocos.x, comecocos.y)) {
 				comecocos.vx = 0;
 				comecocos.vy = 1;
-				comecocos.direccion = "DOWN";
+				comecocos.direccion = Direction.DOWN;
 			}
 		}
 		if (tecla === KEY_UP) {
-			if (limite("UP", comecocos.x, comecocos.y)) {
+			if (limite(Direction.UP, comecocos.x, comecocos.y)) {
 				comecocos.vx = 0;
 				comecocos.vy = -1;
-				comecocos.direccion = "UP";
+				comecocos.direccion = Direction.UP;
 			}
 		}
-		if (tecla === KEY_RIGHT && comecocos.direccion !== "RIGHT") {
-			if (limite("RIGHT", comecocos.x, comecocos.y)) {
+		if (tecla === KEY_RIGHT && comecocos.direccion !== Direction.RIGHT) {
+			if (limite(Direction.RIGHT, comecocos.x, comecocos.y)) {
 				comecocos.vx = 1;
 				comecocos.vy = 0;
-				comecocos.direccion = "RIGHT";
+				comecocos.direccion = Direction.RIGHT;
 			}
 		}
-		if (tecla === KEY_LEFT && comecocos.direccion !== "LEFT") {
-			if (limite("LEFT", comecocos.x, comecocos.y)) {
+		if (tecla === KEY_LEFT && comecocos.direccion !== Direction.LEFT) {
+			if (limite(Direction.LEFT, comecocos.x, comecocos.y)) {
 				comecocos.vx = -1;
 				comecocos.vy = 0;
-				comecocos.direccion = "LEFT";
+				comecocos.direccion = Direction.LEFT;
 			}
 		}
 		if (limite(comecocos.direccion, comecocos.x, comecocos.y)) {
@@ -473,7 +481,7 @@ function accion() {
 			} else if (comecocos.x + 16 > canvas.width) {
 				comecocos.x = 0;
 			}
-			if (estaCentrado("UP", comecocos.x, comecocos.y) && estaCentrado("LEFT", comecocos.x, comecocos.y) &&
+			if (estaCentrado(Direction.UP, comecocos.x, comecocos.y) && estaCentrado(Direction.LEFT, comecocos.x, comecocos.y) &&
 					map.arrayMapa[Math.trunc((comecocos.y) / 30)][Math.trunc((comecocos.x) / 30)] !== 1) {
 				map.arrayMapa[Math.trunc((comecocos.y) / 30)][Math.trunc((comecocos.x) / 30)] = 1;
 				puntos += 10;
