@@ -76,8 +76,7 @@ function estaCentrado(direccion, horizontal, vertical) {
 		if (Math.trunc((horizontal) / 30) * 30 + 15 === horizontal) {
 			return true;
 		}
-	}
-	if (direccion === Direction.RIGHT || direccion === Direction.LEFT) {
+	}else if (direccion === Direction.RIGHT || direccion === Direction.LEFT) {
 		if (Math.trunc((vertical) / 30) * 30 + 15 === vertical) {
 			return true;
 		}
@@ -86,8 +85,8 @@ function estaCentrado(direccion, horizontal, vertical) {
 }
 function perserguirComecocos(horizontal, vertical) {
 	var direcciones = ["", ""];
-	recorridox = horizontal - pacman.x;
-	recorridoy = vertical - pacman.y;
+	var recorridox = horizontal - pacman.x;
+	var recorridoy = vertical - pacman.y;
 	if (Math.abs(recorridox) >= Math.abs(recorridoy)) {
 		if (horizontal <= pacman.x) {
 			direcciones[0] = Direction.RIGHT;
@@ -144,7 +143,7 @@ function perserguirComecocos(horizontal, vertical) {
 	}
 	return direcciones;
 }
-function moverFantasmaRojo(color) {
+function moverFantasmaRojo() {
 	if (!limite(ghostRed.direccion, ghostRed.x, ghostRed.y) ||
 			limite(ghostRed.direccionCorrecta, ghostRed.x, ghostRed.y)) {
 		var arrayDirecciones = perserguirComecocos(ghostRed.x, ghostRed.y);
