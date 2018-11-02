@@ -1,17 +1,18 @@
 /* global Direction, ctx */
 
 class Ghost{
-	constructor (x, y, color){
+	constructor (x, y, color, speed){
 		this.x = x,
 		this.y = y;
 		this.vx = 0;
 		this.vy = 0;
 		this.color = color;
 		this.direccion = Direction.DEFAULT;
-		this.direccionCorrecta = Direction.DEFAUL;
+		this.direccionCorrecta = Direction.DEFAULT;
+		this.speed = speed;
 	}
 	
-	draw() {
+	draw(){
 		ctx.fillStyle = this.color;
 		ctx.beginPath();
 		ctx.moveTo(this.x - 16, this.y - 7);
@@ -36,6 +37,35 @@ class Ghost{
 		ctx.fillStyle = "#000";
 		ctx.fillRect(this.x - 7, this.y - 4, 2, 3);
 		ctx.fillRect(this.x + 5, this.y - 4, 2, 3);
+	}
+	
+	move(){
+		if (!limite(this.direccion, this.x, this.y) ||
+				limite(this.direccionCorrecta, this.x, this.y)) {
+			var arrayDirecciones = perserguirComecocos(this.x, this.y);
+			this.direccion = arrayDirecciones[1];
+			this.direccionCorrecta = arrayDirecciones[0];
+		}
+		switch (this.direccion) {
+			case Direction.UP:
+				this.vx = 0;
+				this.vy = -1;
+				break;
+			case Direction.DOWN:
+				this.vx = 0;
+				this.vy = 1;
+				break;
+			case Direction.RIGHT:
+				this.vx = 1;
+				this.vy = 0;
+				break;
+			case Direction.LEFT:
+				this.vx = -1;
+				this.vy = 0;
+				break;
+		}
+		this.x += this.vx * this.speed;
+		this.y += this.vy * this.speed;
 	}
 }
 

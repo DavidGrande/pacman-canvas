@@ -18,10 +18,10 @@ var Direction = {
 
 var pacman = new Pacman();
 
-var ghostRed = new Ghost(420, 345, "#F00");
-var ghostOrange = new Ghost(420, 345, "#F90");
-var ghostGreen = new Ghost(420, 345, "#0F0");
-var ghostPink = new Ghost(420, 345, "#F99");
+var ghostRed = new Ghost(420, 345, "#F00", 5);
+var ghostOrange = new Ghost(420, 345, "#F90", 5);
+var ghostGreen = new Ghost(420, 345, "#0F0", 2.5);
+var ghostPink = new Ghost(420, 345, "#F99", 5);
 
 function draw() {
 	map.draw();
@@ -143,88 +143,21 @@ function perserguirComecocos(horizontal, vertical) {
 	}
 	return direcciones;
 }
-function moverFantasmaRojo() {
-	if (!limite(ghostRed.direccion, ghostRed.x, ghostRed.y) ||
-			limite(ghostRed.direccionCorrecta, ghostRed.x, ghostRed.y)) {
-		var arrayDirecciones = perserguirComecocos(ghostRed.x, ghostRed.y);
-		ghostRed.direccion = arrayDirecciones[1];
-		ghostRed.direccionCorrecta = arrayDirecciones[0];
-	}
-	switch (ghostRed.direccion) {
-		case Direction.UP:
-			ghostRed.vx = 0;
-			ghostRed.vy = -1;
-			break;
-		case Direction.DOWN:
-			ghostRed.vx = 0;
-			ghostRed.vy = 1;
-			break;
-		case Direction.RIGHT:
-			ghostRed.vx = 1;
-			ghostRed.vy = 0;
-			break;
-		case Direction.LEFT:
-			ghostRed.vx = -1;
-			ghostRed.vy = 0;
-			break;
-	}
-	ghostRed.x += ghostRed.vx * 5;
-	ghostRed.y += ghostRed.vy * 5;
-}
-function moverFantasmaVerde() {
-	if (!limite(ghostGreen.direccion, ghostGreen.x, ghostGreen.y) ||
-			limite(ghostGreen.direccionCorrecta, ghostGreen.x, ghostGreen.y)) {
-		var arrayDirecciones = perserguirComecocos(ghostGreen.x, ghostGreen.y);
-		ghostGreen.direccion = arrayDirecciones[1];
-		ghostGreen.direccionCorrecta = arrayDirecciones[0];
-	}
-	switch (ghostGreen.direccion) {
-		case Direction.UP:
-			ghostGreen.vx = 0;
-			ghostGreen.vy = -1;
-			break;
-		case Direction.DOWN:
-			ghostGreen.vx = 0;
-			ghostGreen.vy = 1;
-			break;
-		case Direction.RIGHT:
-			ghostGreen.vx = 1;
-			ghostGreen.vy = 0;
-			break;
-		case Direction.LEFT:
-			ghostGreen.vx = -1;
-			ghostGreen.vy = 0;
-			break;
-	}
-	ghostGreen.x += ghostGreen.vx * 2.5;
-	ghostGreen.y += ghostGreen.vy * 2.5;
-}
+
 function numeroAleatorio() {
-	var max = 4;
-	var min = 0;
+	var max = 5;
+	var min = 1;
 	return Math.floor(Math.random() * (max - min)) + min;
 }
+
 function direccionAleatoria(horizontal, vertical) {
 	var direccion;
 	do {
-		var rd = numeroAleatorio();
-		switch (rd) {
-			case 0:
-				direccion = Direction.UP;
-				break;
-			case 1:
-				direccion = Direction.DOWN;
-				break;
-			case 2:
-				direccion = Direction.RIGHT;
-				break;
-			case 3:
-				direccion = Direction.LEFT;
-				break;
-		}
+		direccion = numeroAleatorio();
 	} while (!limite(direccion, horizontal, vertical));
 	return direccion;
 }
+
 function nuevaDireccionNaranja(direccion, horizontal, vertical) {
 	var dirContraria;
 	switch (direccion) {
@@ -328,9 +261,9 @@ function moverFantasmaRosa() {
 	ghostPink.y += ghostPink.vy * 5;
 }
 function moverFantasmas() {
-	moverFantasmaRojo();
+	ghostRed.move();
 	moverFantasmaNaranja();
-	moverFantasmaVerde();
+	ghostGreen.move();
 	moverFantasmaRosa();
 }
 var tecla;
