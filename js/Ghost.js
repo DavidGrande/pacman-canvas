@@ -1,9 +1,9 @@
-/* global Direction, ctx */
+/* global Direction, ctx, canvas */
 
 class Ghost {
 	constructor(x, y, color, speed) {
 		this.x = x,
-				this.y = y;
+		this.y = y;
 		this.vx = 0;
 		this.vy = 0;
 		this.color = color;
@@ -39,13 +39,7 @@ class Ghost {
 		ctx.fillRect(this.x + 5, this.y - 4, 2, 3);
 	}
 
-	move() {
-		if (!limite(this.direccion, this.x, this.y) ||
-				limite(this.direccionCorrecta, this.x, this.y)) {
-			var arrayDirecciones = perserguirComecocos(this.x, this.y);
-			this.direccion = arrayDirecciones[1];
-			this.direccionCorrecta = arrayDirecciones[0];
-		}
+	changeDirection(){
 		switch (this.direccion) {
 			case Direction.UP:
 				this.vx = 0;
@@ -64,83 +58,43 @@ class Ghost {
 				this.vy = 0;
 				break;
 		}
-		this.x += this.vx * this.speed;
-		this.y += this.vy * this.speed;
 	}
-}
-;
+};
 
 class GhostFollower extends Ghost {
 	move() {
-		if (!limite(this.direccion, this.x, this.y) ||
-				limite(this.direccionCorrecta, this.x, this.y)) {
+		if (!limit(this.direccion, this.x, this.y) ||
+				limit(this.direccionCorrecta, this.x, this.y)) {
 			var arrayDirecciones = perserguirComecocos(this.x, this.y);
 			this.direccion = arrayDirecciones[1];
 			this.direccionCorrecta = arrayDirecciones[0];
 		}
-		switch (this.direccion) {
-			case Direction.UP:
-				this.vx = 0;
-				this.vy = -1;
-				break;
-			case Direction.DOWN:
-				this.vx = 0;
-				this.vy = 1;
-				break;
-			case Direction.RIGHT:
-				this.vx = 1;
-				this.vy = 0;
-				break;
-			case Direction.LEFT:
-				this.vx = -1;
-				this.vy = 0;
-				break;
-		}
+		this.changeDirection();
 		this.x += this.vx * this.speed;
 		this.y += this.vy * this.speed;
 	}
-}
-;
+};
 
 class GhostRandom extends Ghost {
 	move() {
 		if (this.direccion === Direction.LEFT || this.direccion === Direction.RIGHT) {
-			if (limite(Direction.UP, this.x, this.y) ||
-					limite(Direction.DOWN, this.x, this.y)) {
+			if (limit(Direction.UP, this.x, this.y) ||
+					limit(Direction.DOWN, this.x, this.y)) {
 				this.direccion = nuevaDireccionNaranja(this.direccion, this.x, this.y);
 			}
-		} else if (limite(Direction.LEFT, this.x, this.y) ||
-				limite(Direction.RIGHT, this.x, this.y)) {
+		} else if (limit(Direction.LEFT, this.x, this.y) ||
+				limit(Direction.RIGHT, this.x, this.y)) {
 			this.direccion = nuevaDireccionNaranja(this.direccion, this.x, this.y);
-		} else if (!limite(this.direccion, this.x, this.y)) {
+		} else if (!limit(this.direccion, this.x, this.y)) {
 			this.direccion = nuevaDireccionNaranja(this.direccion, this.x, this.y);
 		}
 		if (this.x < 0) {
 			this.x = canvas.width;
-		}
-		if (this.x > canvas.width) {
+		} else if (this.x > canvas.width) {
 			this.x = 0;
 		}
-		switch (this.direccion) {
-			case Direction.UP:
-				this.vx = 0;
-				this.vy = -1;
-				break;
-			case Direction.DOWN:
-				this.vx = 0;
-				this.vy = 1;
-				break;
-			case Direction.RIGHT:
-				this.vx = 1;
-				this.vy = 0;
-				break;
-			case Direction.LEFT:
-				this.vx = -1;
-				this.vy = 0;
-				break;
-		}
+		this.changeDirection();
 		this.x += this.vx * 5;
 		this.y += this.vy * 5;
 	}
-}
-;
+};

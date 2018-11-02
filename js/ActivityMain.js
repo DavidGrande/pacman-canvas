@@ -39,7 +39,7 @@ function draw() {
 	//touch.draw();
 }
 
-function limite(direccion, horizontal, vertical) {
+function limit(direccion, horizontal, vertical) {
 	var topey = 0;
 	var topex = 0;
 	switch (direccion) {
@@ -60,10 +60,8 @@ function limite(direccion, horizontal, vertical) {
 			topex = -16;
 			break;
 	}
-	if ((map.arrayMapa[Math.trunc((vertical + topey) / 30)][Math.trunc((horizontal + topex) / 30)] === 1 ||
-			map.arrayMapa[Math.trunc((vertical + topey) / 30)][Math.trunc((horizontal + topex) / 30)] === 2 ||
-			map.arrayMapa[Math.trunc((vertical + topey) / 30)][Math.trunc((horizontal + topex) / 30)] === 3) &&
-			estaCentrado(direccion, horizontal, vertical)) {
+	var aux = map.arrayMapa[Math.trunc((vertical + topey) / 30)][Math.trunc((horizontal + topex) / 30)];
+	if ((aux >= 1 && aux <= 3) && estaCentrado(direccion, horizontal, vertical)) {
 		return true;
 	} else {
 		return false;
@@ -90,12 +88,12 @@ function perserguirComecocos(horizontal, vertical) {
 	if (Math.abs(recorridox) >= Math.abs(recorridoy)) {
 		if (horizontal <= pacman.x) {
 			direcciones[0] = Direction.RIGHT;
-			if (limite(Direction.RIGHT, horizontal, vertical)) {
+			if (limit(Direction.RIGHT, horizontal, vertical)) {
 				direcciones[1] = Direction.RIGHT;
 			} else {
-				if (vertical >= pacman.y && limite(Direction.UP, horizontal, vertical)) {
+				if (vertical >= pacman.y && limit(Direction.UP, horizontal, vertical)) {
 					direcciones[1] = Direction.UP;
-				} else if (limite(Direction.DOWN, horizontal, vertical)) {
+				} else if (limit(Direction.DOWN, horizontal, vertical)) {
 					direcciones[1] = Direction.DOWN;
 				} else {
 					direcciones[1] = Direction.LEFT;
@@ -103,12 +101,12 @@ function perserguirComecocos(horizontal, vertical) {
 			}
 		} else {
 			direcciones[0] = Direction.LEFT;
-			if (limite(Direction.LEFT, horizontal, vertical)) {
+			if (limit(Direction.LEFT, horizontal, vertical)) {
 				direcciones[1] = Direction.LEFT;
 			} else {
-				if (vertical >= pacman.y && limite(Direction.UP, horizontal, vertical)) {
+				if (vertical >= pacman.y && limit(Direction.UP, horizontal, vertical)) {
 					direcciones[1] = Direction.UP;
-				} else if (limite(Direction.DOWN, horizontal, vertical)) {
+				} else if (limit(Direction.DOWN, horizontal, vertical)) {
 					direcciones[1] = Direction.DOWN;
 				} else {
 					direcciones[1] = Direction.LEFT;
@@ -119,10 +117,10 @@ function perserguirComecocos(horizontal, vertical) {
 	} else {
 		if (vertical >= pacman.y) {
 			direcciones[0] = Direction.UP;
-			if (limite(Direction.UP, horizontal, vertical)) {
+			if (limit(Direction.UP, horizontal, vertical)) {
 				direcciones[1] = Direction.UP;
 			} else {
-				if (horizontal <= pacman.x && limite(Direction.RIGHT, horizontal, vertical)) {
+				if (horizontal <= pacman.x && limit(Direction.RIGHT, horizontal, vertical)) {
 					direcciones[1] = Direction.RIGHT;
 				} else {
 					direcciones[1] = Direction.LEFT;
@@ -130,10 +128,10 @@ function perserguirComecocos(horizontal, vertical) {
 			}
 		} else {
 			direcciones[0] = Direction.DOWN;
-			if (limite(Direction.DOWN, horizontal, vertical)) {
+			if (limit(Direction.DOWN, horizontal, vertical)) {
 				direcciones[1] = Direction.DOWN;
 			} else {
-				if (horizontal <= pacman.x && limite(Direction.RIGHT, horizontal, vertical)) {
+				if (horizontal <= pacman.x && limit(Direction.RIGHT, horizontal, vertical)) {
 					direcciones[1] = Direction.RIGHT;
 				} else {
 					direcciones[1] = Direction.LEFT;
@@ -154,7 +152,7 @@ function direccionAleatoria(horizontal, vertical) {
 	var direccion;
 	do {
 		direccion = numeroAleatorio();
-	} while (!limite(direccion, horizontal, vertical));
+	} while (!limit(direccion, horizontal, vertical));
 	return direccion;
 }
 
@@ -215,34 +213,34 @@ function accion() {
 	}
 	if (!pausa) {
 		if (tecla === KEY_DOWN) {
-			if (limite(Direction.DOWN, pacman.x, pacman.y)) {
+			if (limit(Direction.DOWN, pacman.x, pacman.y)) {
 				pacman.vx = 0;
 				pacman.vy = 1;
 				pacman.direccion = Direction.DOWN;
 			}
 		}
 		if (tecla === KEY_UP) {
-			if (limite(Direction.UP, pacman.x, pacman.y)) {
+			if (limit(Direction.UP, pacman.x, pacman.y)) {
 				pacman.vx = 0;
 				pacman.vy = -1;
 				pacman.direccion = Direction.UP;
 			}
 		}
 		if (tecla === KEY_RIGHT && pacman.direccion !== Direction.RIGHT) {
-			if (limite(Direction.RIGHT, pacman.x, pacman.y)) {
+			if (limit(Direction.RIGHT, pacman.x, pacman.y)) {
 				pacman.vx = 1;
 				pacman.vy = 0;
 				pacman.direccion = Direction.RIGHT;
 			}
 		}
 		if (tecla === KEY_LEFT && pacman.direccion !== Direction.LEFT) {
-			if (limite(Direction.LEFT, pacman.x, pacman.y)) {
+			if (limit(Direction.LEFT, pacman.x, pacman.y)) {
 				pacman.vx = -1;
 				pacman.vy = 0;
 				pacman.direccion = Direction.LEFT;
 			}
 		}
-		if (limite(pacman.direccion, pacman.x, pacman.y)) {
+		if (limit(pacman.direccion, pacman.x, pacman.y)) {
 			pacman.x += pacman.vx * 5;
 			pacman.y += pacman.vy * 5;
 			if (pacman.x < 0) {
