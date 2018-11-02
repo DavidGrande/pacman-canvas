@@ -1,0 +1,78 @@
+body {
+    background-color: black;
+    margin: 0;
+}
+.juego{
+    text-align: center;
+    width: 100%;
+    padding: 1em 0 1em 0;
+}
+.juego p{
+    color: white;
+}
+#canvas{
+    margin: 0 auto;
+    height: 80vh;
+}
+/*Fuente pacman*/
+@font-face {
+    font-family: "Pacman";
+    src: url("../font/pac-font.ttf");
+}
+header{
+    border-bottom: #FFDD1B 2px solid;
+    background: #1F44C24D;
+    text-align: center;
+    padding-bottom: 1em;
+}
+h1 {
+    font-weight: lighter;
+    padding: 0.5em 0 0.5em 0;
+    font-family: "Pacman";
+    margin: 0;
+}
+header p{
+    width: 70%;
+    display: inline;
+    color: #fff;
+}
+a {
+    text-decoration: none;
+    -webkit-transition: all 0.5s;
+    transition: all 0.5s;
+}
+h1 a {
+    color: #fff;
+    font-family: "Pacman";
+    -webkit-animation: neon1 1.5s ease-in-out infinite alternate;
+    animation: neon1 1.5s ease-in-out infinite alternate;
+}
+h1 a {
+    color: #FFDD1B;
+    font-family: "Pacman";
+}
+h1 a:hover {
+    -webkit-animation: neon3 1.5s ease-in-out infinite alternate;
+    animation: neon3 1.5s ease-in-out infinite alternate;
+}
+h1 a:hover {
+    color: #ffffff;
+}
+/*glow for webkit*/
+@-webkit-keyframes neon3 {
+    from {
+        text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #FFDD1B, 0 0 70px #FFDD1B, 0 0 80px #FFDD1B, 0 0 100px #FFDD1B, 0 0 150px #FFDD1B;
+    }
+    to {
+        text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #FFDD1B, 0 0 35px #FFDD1B, 0 0 40px #FFDD1B, 0 0 50px #FFDD1B, 0 0 75px #FFDD1B;
+    }
+}
+/*glow*/
+@keyframes neon1 {
+    from {
+        text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #FFDD1B, 0 0 70px #FFDD1B, 0 0 80px #FFDD1B, 0 0 100px #FFDD1B, 0 0 150px #FFDD1B;
+    }
+    to {
+        text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #FFDD1B, 0 0 35px #FFDD1B, 0 0 40px #FFDD1B, 0 0 50px #FFDD1B, 0 0 75px #FFDD1B;
+    }
+}
