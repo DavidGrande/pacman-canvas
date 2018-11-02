@@ -2,6 +2,7 @@
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
 
+/*UNUSED*/
 var touch = new Touch(320, 250, 15, 15);
 
 var puntos = 0;
@@ -15,37 +16,8 @@ var Direction = {
 	DEFAULT : 0
 };
 
-var comecocos = {
-	x: 420,
-	y: 705,
-	vx: 0,
-	vy: 0,
-	radio: 20,
-	direccion: "",
-	draw: function () {
-		ctx.fillStyle = "rgb(255,255,0)";
-		ctx.beginPath();
-		switch (this.direccion) {
-			case Direction.UP:
-				ctx.arc(this.x, this.y, this.radio, 1.25 * Math.PI, Math.PI * 1.75, true);
-				break;
-			case Direction.DOWN:
-				ctx.arc(this.x, this.y, this.radio, Math.PI / 4, Math.PI / 1.3, true);
-				break;
-			case Direction.LEFT:
-				ctx.arc(this.x, this.y, this.radio, Math.PI / 1.4, 1.25 * Math.PI, true);
-				break;
-			case Direction.RIGHT:
-				ctx.arc(this.x, this.y, this.radio, 1.75 * Math.PI, Math.PI / 4, true);
-				break;
-			default:
-				ctx.arc(this.x, this.y, this.radio, 0, 2 * Math.PI, true);
-				break;
-		}
-		ctx.lineTo(this.x, this.y);
-		ctx.fill();
-	}
-};
+var pacman = new Pacman();
+
 var fantasmaRojo = {
 	x: 420,
 	y: 345,
@@ -81,8 +53,6 @@ var fantasmaRosa = {
 	direccion: Direction.DEFAULT
 };
 function drawFantasma(x, y, color) {
-	//ctx.fillStyle = "black";
-	//ctx.fillRect(x-21,y-24,44,49);
 	ctx.fillStyle = color;
 	ctx.beginPath();
 	ctx.moveTo(x - 16, y - 7);
@@ -112,7 +82,7 @@ function draw() {
 	//if (pausa) {
 	map.draw();
 	//}
-	comecocos.draw();
+	pacman.draw();
 	map.drawCocos();
 	drawFantasma(fantasmaRojo.x, fantasmaRojo.y, fantasmaRojo.color);
 	drawFantasma(fantasmaNaranja.x, fantasmaNaranja.y, fantasmaNaranja.color);
@@ -172,15 +142,15 @@ function estaCentrado(direccion, horizontal, vertical) {
 }
 function perserguirComecocos(horizontal, vertical) {
 	var direcciones = ["", ""];
-	recorridox = horizontal - comecocos.x;
-	recorridoy = vertical - comecocos.y;
+	recorridox = horizontal - pacman.x;
+	recorridoy = vertical - pacman.y;
 	if (Math.abs(recorridox) >= Math.abs(recorridoy)) {
-		if (horizontal <= comecocos.x) {
+		if (horizontal <= pacman.x) {
 			direcciones[0] = Direction.RIGHT;
 			if (limite(Direction.RIGHT, horizontal, vertical)) {
 				direcciones[1] = Direction.RIGHT;
 			} else {
-				if (vertical >= comecocos.y && limite(Direction.UP, horizontal, vertical)) {
+				if (vertical >= pacman.y && limite(Direction.UP, horizontal, vertical)) {
 					direcciones[1] = Direction.UP;
 				} else if (limite(Direction.DOWN, horizontal, vertical)) {
 					direcciones[1] = Direction.DOWN;
@@ -193,7 +163,7 @@ function perserguirComecocos(horizontal, vertical) {
 			if (limite(Direction.LEFT, horizontal, vertical)) {
 				direcciones[1] = Direction.LEFT;
 			} else {
-				if (vertical >= comecocos.y && limite(Direction.UP, horizontal, vertical)) {
+				if (vertical >= pacman.y && limite(Direction.UP, horizontal, vertical)) {
 					direcciones[1] = Direction.UP;
 				} else if (limite(Direction.DOWN, horizontal, vertical)) {
 					direcciones[1] = Direction.DOWN;
@@ -204,12 +174,12 @@ function perserguirComecocos(horizontal, vertical) {
 
 		}
 	} else {
-		if (vertical >= comecocos.y) {
+		if (vertical >= pacman.y) {
 			direcciones[0] = Direction.UP;
 			if (limite(Direction.UP, horizontal, vertical)) {
 				direcciones[1] = Direction.UP;
 			} else {
-				if (horizontal <= comecocos.x && limite(Direction.RIGHT, horizontal, vertical)) {
+				if (horizontal <= pacman.x && limite(Direction.RIGHT, horizontal, vertical)) {
 					direcciones[1] = Direction.RIGHT;
 				} else {
 					direcciones[1] = Direction.LEFT;
@@ -220,7 +190,7 @@ function perserguirComecocos(horizontal, vertical) {
 			if (limite(Direction.DOWN, horizontal, vertical)) {
 				direcciones[1] = Direction.DOWN;
 			} else {
-				if (horizontal <= comecocos.x && limite(Direction.RIGHT, horizontal, vertical)) {
+				if (horizontal <= pacman.x && limite(Direction.RIGHT, horizontal, vertical)) {
 					direcciones[1] = Direction.RIGHT;
 				} else {
 					direcciones[1] = Direction.LEFT;
@@ -446,49 +416,49 @@ function accion() {
 	}
 	if (!pausa) {
 		if (tecla === KEY_DOWN) {
-			if (limite(Direction.DOWN, comecocos.x, comecocos.y)) {
-				comecocos.vx = 0;
-				comecocos.vy = 1;
-				comecocos.direccion = Direction.DOWN;
+			if (limite(Direction.DOWN, pacman.x, pacman.y)) {
+				pacman.vx = 0;
+				pacman.vy = 1;
+				pacman.direccion = Direction.DOWN;
 			}
 		}
 		if (tecla === KEY_UP) {
-			if (limite(Direction.UP, comecocos.x, comecocos.y)) {
-				comecocos.vx = 0;
-				comecocos.vy = -1;
-				comecocos.direccion = Direction.UP;
+			if (limite(Direction.UP, pacman.x, pacman.y)) {
+				pacman.vx = 0;
+				pacman.vy = -1;
+				pacman.direccion = Direction.UP;
 			}
 		}
-		if (tecla === KEY_RIGHT && comecocos.direccion !== Direction.RIGHT) {
-			if (limite(Direction.RIGHT, comecocos.x, comecocos.y)) {
-				comecocos.vx = 1;
-				comecocos.vy = 0;
-				comecocos.direccion = Direction.RIGHT;
+		if (tecla === KEY_RIGHT && pacman.direccion !== Direction.RIGHT) {
+			if (limite(Direction.RIGHT, pacman.x, pacman.y)) {
+				pacman.vx = 1;
+				pacman.vy = 0;
+				pacman.direccion = Direction.RIGHT;
 			}
 		}
-		if (tecla === KEY_LEFT && comecocos.direccion !== Direction.LEFT) {
-			if (limite(Direction.LEFT, comecocos.x, comecocos.y)) {
-				comecocos.vx = -1;
-				comecocos.vy = 0;
-				comecocos.direccion = Direction.LEFT;
+		if (tecla === KEY_LEFT && pacman.direccion !== Direction.LEFT) {
+			if (limite(Direction.LEFT, pacman.x, pacman.y)) {
+				pacman.vx = -1;
+				pacman.vy = 0;
+				pacman.direccion = Direction.LEFT;
 			}
 		}
-		if (limite(comecocos.direccion, comecocos.x, comecocos.y)) {
-			comecocos.x += comecocos.vx * 5;
-			comecocos.y += comecocos.vy * 5;
-			if (comecocos.x < 0) {
-				comecocos.x = canvas.width - 15;
-			} else if (comecocos.x + 16 > canvas.width) {
-				comecocos.x = 0;
+		if (limite(pacman.direccion, pacman.x, pacman.y)) {
+			pacman.x += pacman.vx * 5;
+			pacman.y += pacman.vy * 5;
+			if (pacman.x < 0) {
+				pacman.x = canvas.width - 15;
+			} else if (pacman.x + 16 > canvas.width) {
+				pacman.x = 0;
 			}
-			if (estaCentrado(Direction.UP, comecocos.x, comecocos.y) && estaCentrado(Direction.LEFT, comecocos.x, comecocos.y) &&
-					map.arrayMapa[Math.trunc((comecocos.y) / 30)][Math.trunc((comecocos.x) / 30)] !== 1) {
-				map.arrayMapa[Math.trunc((comecocos.y) / 30)][Math.trunc((comecocos.x) / 30)] = 1;
+			if (estaCentrado(Direction.UP, pacman.x, pacman.y) && estaCentrado(Direction.LEFT, pacman.x, pacman.y) &&
+					map.arrayMapa[Math.trunc((pacman.y) / 30)][Math.trunc((pacman.x) / 30)] !== 1) {
+				map.arrayMapa[Math.trunc((pacman.y) / 30)][Math.trunc((pacman.x) / 30)] = 1;
 				puntos += 10;
 				document.getElementById("puntos").innerHTML = puntos;
 			}
 		} else {
-			comecocos.direccion = "";
+			pacman.direccion = "";
 		}
 		moverFantasmas();
 	}
