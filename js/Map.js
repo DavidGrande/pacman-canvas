@@ -35,6 +35,8 @@ class Map{
             [0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         ];
+		this.xLength = this.arrayMapa[0].length;
+		this.yLength = this.arrayMapa.length;
     }
     
     draw() {
@@ -328,6 +330,7 @@ class Map{
         ctx.arcTo(x, y, x, y + radius, radius);
         ctx.stroke();
     }
+	
     makeT(x, y) {
         ctx.beginPath();
         ctx.moveTo(x + 6, y);
@@ -349,4 +352,26 @@ class Map{
         ctx.quadraticCurveTo(x, y, x + 6, y);
         ctx.stroke();
     }
+	
+	drawCoco(size, i, j){
+		ctx.beginPath();
+		if(size === 2){
+			ctx.arc((j) * 30 + 15, (i) * 30 + 15, 3, 0, Math.PI * 2, true);
+		} else {
+			ctx.arc((j) * 30 + 15, (i) * 30 + 15, 5, 0, Math.PI * 2, true);
+		}
+		ctx.fill();
+	}
+	
+	drawCocos() {
+		ctx.fillStyle = "#FFF";
+		for (var i = 1; i < this.yLength-1; i++) {
+			for (var j = 1; j < this.xLength-1; j++) {
+				var cell = this.arrayMapa[i][j];
+				if (cell === 2 || cell === 3) {
+					this.drawCoco(cell, i, j);
+				}
+			}
+		}
+	}
 }
