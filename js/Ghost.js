@@ -63,13 +63,16 @@ class Ghost {
 
 class GhostFollower extends Ghost {
 	move() {
-		if (!limit(this.direccion, this.x, this.y) ||
-				limit(this.direccionCorrecta, this.x, this.y)) {
+		var dirChanged = false;
+		if (!limit(this.direccion, this.x, this.y) || limit(this.direccionCorrecta, this.x, this.y)) {
 			var arrayDirecciones = perserguirComecocos(this.x, this.y);
 			this.direccion = arrayDirecciones[1];
 			this.direccionCorrecta = arrayDirecciones[0];
+			dirChanged = true;
 		}
-		this.changeDirection();
+		if(dirChanged){
+			this.changeDirection();
+		}
 		this.x += this.vx * this.speed;
 		this.y += this.vy * this.speed;
 	}
@@ -77,23 +80,29 @@ class GhostFollower extends Ghost {
 
 class GhostRandom extends Ghost {
 	move() {
+		var dirChanged = false;
 		if (this.direccion === Direction.LEFT || this.direccion === Direction.RIGHT) {
 			if (limit(Direction.UP, this.x, this.y) ||
 					limit(Direction.DOWN, this.x, this.y)) {
-				this.direccion = nuevaDireccionNaranja(this.direccion, this.x, this.y);
+				this.direccion = newDirection(this.direccion, this.x, this.y);
+				dirChanged = true;
 			}
 		} else if (limit(Direction.LEFT, this.x, this.y) ||
 				limit(Direction.RIGHT, this.x, this.y)) {
-			this.direccion = nuevaDireccionNaranja(this.direccion, this.x, this.y);
+			this.direccion = newDirection(this.direccion, this.x, this.y);
+			dirChanged = true;
 		} else if (!limit(this.direccion, this.x, this.y)) {
-			this.direccion = nuevaDireccionNaranja(this.direccion, this.x, this.y);
+			this.direccion = newDirection(this.direccion, this.x, this.y);
+			dirChanged = true;
 		}
 		if (this.x < 0) {
 			this.x = canvas.width;
 		} else if (this.x > canvas.width) {
 			this.x = 0;
 		}
-		this.changeDirection();
+		if(dirChanged){
+			this.changeDirection();
+		}
 		this.x += this.vx * 5;
 		this.y += this.vy * 5;
 	}

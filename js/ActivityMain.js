@@ -9,11 +9,11 @@ var puntos = 0;
 var map = new Map();
 
 var Direction = {
-	UP : 1,
-	DOWN : 2,
-	LEFT : 3,
-	RIGHT : 4,
-	DEFAULT : 0
+	UP: 1,
+	DOWN: 2,
+	LEFT: 3,
+	RIGHT: 4,
+	DEFAULT: 0
 };
 
 var pacman = new Pacman();
@@ -74,7 +74,7 @@ function estaCentrado(direccion, horizontal, vertical) {
 		if (Math.trunc((horizontal) / 30) * 30 + 15 === horizontal) {
 			return true;
 		}
-	}else if (direccion === Direction.RIGHT || direccion === Direction.LEFT) {
+	} else if (direccion === Direction.RIGHT || direccion === Direction.LEFT) {
 		if (Math.trunc((vertical) / 30) * 30 + 15 === vertical) {
 			return true;
 		}
@@ -156,7 +156,7 @@ function direccionAleatoria(horizontal, vertical) {
 	return direccion;
 }
 
-function nuevaDireccionNaranja(direccion, horizontal, vertical) {
+function newDirection(direccion, horizontal, vertical) {
 	var dirContraria;
 	switch (direccion) {
 		case Direction.UP:
@@ -189,56 +189,55 @@ function moverFantasmas() {
 }
 var tecla;
 var pausa = true;
+
+function interaccion(e) {
+	var KEY_SPACE = 32;
+	tecla = e.keyCode;
+	if (tecla === KEY_SPACE) {
+		pausa = !pausa;
+	}
+	return false;
+}
+
 function accion() {
 	draw();
 	var KEY_LEFT = 37;
 	var KEY_UP = 38;
 	var KEY_RIGHT = 39;
 	var KEY_DOWN = 40;
-	var KEY_SPACE = 32;
-
+	
 	document.onkeydown = interaccion;
-	function interaccion(e) {
-		if (e.keyCode === KEY_SPACE) {
-			if (pausa) {
-				pausa = false;
-			} else {
-				pausa = true;
-			}
-		}
-		if (!pausa) {
-			tecla = e.keyCode;
-		}
-		return false;
-	}
+
 	if (!pausa) {
-		if (tecla === KEY_DOWN) {
-			if (limit(Direction.DOWN, pacman.x, pacman.y)) {
-				pacman.vx = 0;
-				pacman.vy = 1;
-				pacman.direccion = Direction.DOWN;
-			}
-		}
-		if (tecla === KEY_UP) {
-			if (limit(Direction.UP, pacman.x, pacman.y)) {
-				pacman.vx = 0;
-				pacman.vy = -1;
-				pacman.direccion = Direction.UP;
-			}
-		}
-		if (tecla === KEY_RIGHT && pacman.direccion !== Direction.RIGHT) {
-			if (limit(Direction.RIGHT, pacman.x, pacman.y)) {
-				pacman.vx = 1;
-				pacman.vy = 0;
-				pacman.direccion = Direction.RIGHT;
-			}
-		}
-		if (tecla === KEY_LEFT && pacman.direccion !== Direction.LEFT) {
-			if (limit(Direction.LEFT, pacman.x, pacman.y)) {
-				pacman.vx = -1;
-				pacman.vy = 0;
-				pacman.direccion = Direction.LEFT;
-			}
+		switch (tecla) {
+			case KEY_DOWN:
+				if (limit(Direction.DOWN, pacman.x, pacman.y)) {
+					pacman.vx = 0;
+					pacman.vy = 1;
+					pacman.direccion = Direction.DOWN;
+				}
+				break;
+			case KEY_UP:
+				if (limit(Direction.UP, pacman.x, pacman.y)) {
+					pacman.vx = 0;
+					pacman.vy = -1;
+					pacman.direccion = Direction.UP;
+				}
+				break;
+			case KEY_RIGHT:
+				if (limit(Direction.RIGHT, pacman.x, pacman.y)) {
+					pacman.vx = 1;
+					pacman.vy = 0;
+					pacman.direccion = Direction.RIGHT;
+				}
+				break;
+			case KEY_LEFT:
+				if (limit(Direction.LEFT, pacman.x, pacman.y)) {
+					pacman.vx = -1;
+					pacman.vy = 0;
+					pacman.direccion = Direction.LEFT;
+				}
+				break;
 		}
 		if (limit(pacman.direccion, pacman.x, pacman.y)) {
 			pacman.x += pacman.vx * 5;
@@ -248,14 +247,17 @@ function accion() {
 			} else if (pacman.x + 16 > canvas.width) {
 				pacman.x = 0;
 			}
-			if (estaCentrado(Direction.UP, pacman.x, pacman.y) && estaCentrado(Direction.LEFT, pacman.x, pacman.y) &&
-					map.arrayMapa[Math.trunc((pacman.y) / 30)][Math.trunc((pacman.x) / 30)] !== 1) {
-				map.arrayMapa[Math.trunc((pacman.y) / 30)][Math.trunc((pacman.x) / 30)] = 1;
-				puntos += 10;
-				document.getElementById("puntos").innerHTML = puntos;
+			if (estaCentrado(Direction.UP, pacman.x, pacman.y) && estaCentrado(Direction.LEFT, pacman.x, pacman.y)){
+				var auxY = Math.trunc((pacman.y) / 30);
+				var auxX = Math.trunc((pacman.x) / 30);
+				if(map.arrayMapa[auxY][auxX] !== 1) {
+					map.arrayMapa[auxY][auxX] = 1;
+					puntos += 10;
+					document.getElementById("puntos").innerHTML = puntos;
+				}
 			}
 		} else {
-			pacman.direccion = "";
+			pacman.direccion = Direction.DEFAULT;
 		}
 		moverFantasmas();
 	}
