@@ -408,3 +408,5 @@ function accion() {
 	}
 	window.requestAnimationFrame(accion);
 }
+
+document.addEventListener("load", accion());
