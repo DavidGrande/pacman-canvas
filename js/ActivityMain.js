@@ -18,76 +18,19 @@ var Direction = {
 
 var pacman = new Pacman();
 
-var fantasmaRojo = {
-	x: 420,
-	y: 345,
-	vx: 0,
-	vy: 0,
-	color: "#F00",
-	direccion: Direction.DEFAULT,
-	direccionCorrecta: Direction.DEFAULT
-};
-var fantasmaNaranja = {
-	x: 420,
-	y: 345,
-	vx: 0,
-	vy: 0,
-	color: "#F90",
-	direccion: Direction.DEFAULT
-};
-var fantasmaVerde = {
-	x: 420,
-	y: 345,
-	vx: 0,
-	vy: 0,
-	color: "#0F0",
-	direccion: Direction.DEFAULT,
-	direccionCorrecta: Direction.DEFAULT
-};
-var fantasmaRosa = {
-	x: 420,
-	y: 345,
-	vx: 0,
-	vy: 0,
-	color: "#F99",
-	direccion: Direction.DEFAULT
-};
-function drawFantasma(x, y, color) {
-	ctx.fillStyle = color;
-	ctx.beginPath();
-	ctx.moveTo(x - 16, y - 7);
-	ctx.quadraticCurveTo(x - 14, y - 17, x - 4, y - 19);
-	ctx.lineTo(x + 5, y - 19);
-	ctx.quadraticCurveTo(x + 15, y - 17, x + 17, y - 7);
-	ctx.lineTo(x + 17, y + 19);
-	ctx.lineTo(x + 11, y + 13);
-	ctx.lineTo(x + 5, y + 19);
-	ctx.lineTo(x + 1, y + 15);
-	ctx.lineTo(x, y + 15);
-	ctx.lineTo(x - 4, y + 19);
-	ctx.lineTo(x - 10, y + 13);
-	ctx.lineTo(x - 16, y + 19);
-	ctx.lineTo(x - 16, y - 7);
-	ctx.fill();
-	ctx.fillStyle = "#FFF";
-	ctx.fillRect(x - 7, y - 8, 4, 9);
-	ctx.fillRect(x - 8, y - 7, 6, 7);
-	ctx.fillRect(x + 5, y - 8, 4, 9);
-	ctx.fillRect(x + 4, y - 7, 6, 7);
-	ctx.fillStyle = "#000";
-	ctx.fillRect(x - 7, y - 4, 2, 3);
-	ctx.fillRect(x + 5, y - 4, 2, 3);
-}
+var ghostRed = new Ghost(420, 345, "#F00");
+var ghostOrange = new Ghost(420, 345, "#F90");
+var ghostGreen = new Ghost(420, 345, "#0F0");
+var ghostPink = new Ghost(420, 345, "#F99");
+
 function draw() {
-	//if (pausa) {
 	map.draw();
-	//}
 	pacman.draw();
 	map.drawCocos();
-	drawFantasma(fantasmaRojo.x, fantasmaRojo.y, fantasmaRojo.color);
-	drawFantasma(fantasmaNaranja.x, fantasmaNaranja.y, fantasmaNaranja.color);
-	drawFantasma(fantasmaVerde.x, fantasmaVerde.y, fantasmaVerde.color);
-	drawFantasma(fantasmaRosa.x, fantasmaRosa.y, fantasmaRosa.color);
+	ghostRed.draw();
+	ghostOrange.draw();
+	ghostGreen.draw();
+	ghostPink.draw();
 	if (pausa) {
 		ctx.font = "bold 22px sans-serif";
 		ctx.fillStyle = "#FFF";
@@ -95,6 +38,7 @@ function draw() {
 	}
 	//touch.draw();
 }
+
 function limite(direccion, horizontal, vertical) {
 	var topey = 0;
 	var topex = 0;
@@ -201,60 +145,60 @@ function perserguirComecocos(horizontal, vertical) {
 	return direcciones;
 }
 function moverFantasmaRojo(color) {
-	if (!limite(fantasmaRojo.direccion, fantasmaRojo.x, fantasmaRojo.y) ||
-			limite(fantasmaRojo.direccionCorrecta, fantasmaRojo.x, fantasmaRojo.y)) {
-		var arrayDirecciones = perserguirComecocos(fantasmaRojo.x, fantasmaRojo.y);
-		fantasmaRojo.direccion = arrayDirecciones[1];
-		fantasmaRojo.direccionCorrecta = arrayDirecciones[0];
+	if (!limite(ghostRed.direccion, ghostRed.x, ghostRed.y) ||
+			limite(ghostRed.direccionCorrecta, ghostRed.x, ghostRed.y)) {
+		var arrayDirecciones = perserguirComecocos(ghostRed.x, ghostRed.y);
+		ghostRed.direccion = arrayDirecciones[1];
+		ghostRed.direccionCorrecta = arrayDirecciones[0];
 	}
-	switch (fantasmaRojo.direccion) {
+	switch (ghostRed.direccion) {
 		case Direction.UP:
-			fantasmaRojo.vx = 0;
-			fantasmaRojo.vy = -1;
+			ghostRed.vx = 0;
+			ghostRed.vy = -1;
 			break;
 		case Direction.DOWN:
-			fantasmaRojo.vx = 0;
-			fantasmaRojo.vy = 1;
+			ghostRed.vx = 0;
+			ghostRed.vy = 1;
 			break;
 		case Direction.RIGHT:
-			fantasmaRojo.vx = 1;
-			fantasmaRojo.vy = 0;
+			ghostRed.vx = 1;
+			ghostRed.vy = 0;
 			break;
 		case Direction.LEFT:
-			fantasmaRojo.vx = -1;
-			fantasmaRojo.vy = 0;
+			ghostRed.vx = -1;
+			ghostRed.vy = 0;
 			break;
 	}
-	fantasmaRojo.x += fantasmaRojo.vx * 5;
-	fantasmaRojo.y += fantasmaRojo.vy * 5;
+	ghostRed.x += ghostRed.vx * 5;
+	ghostRed.y += ghostRed.vy * 5;
 }
 function moverFantasmaVerde() {
-	if (!limite(fantasmaVerde.direccion, fantasmaVerde.x, fantasmaVerde.y) ||
-			limite(fantasmaVerde.direccionCorrecta, fantasmaVerde.x, fantasmaVerde.y)) {
-		var arrayDirecciones = perserguirComecocos(fantasmaVerde.x, fantasmaVerde.y);
-		fantasmaVerde.direccion = arrayDirecciones[1];
-		fantasmaVerde.direccionCorrecta = arrayDirecciones[0];
+	if (!limite(ghostGreen.direccion, ghostGreen.x, ghostGreen.y) ||
+			limite(ghostGreen.direccionCorrecta, ghostGreen.x, ghostGreen.y)) {
+		var arrayDirecciones = perserguirComecocos(ghostGreen.x, ghostGreen.y);
+		ghostGreen.direccion = arrayDirecciones[1];
+		ghostGreen.direccionCorrecta = arrayDirecciones[0];
 	}
-	switch (fantasmaVerde.direccion) {
+	switch (ghostGreen.direccion) {
 		case Direction.UP:
-			fantasmaVerde.vx = 0;
-			fantasmaVerde.vy = -1;
+			ghostGreen.vx = 0;
+			ghostGreen.vy = -1;
 			break;
 		case Direction.DOWN:
-			fantasmaVerde.vx = 0;
-			fantasmaVerde.vy = 1;
+			ghostGreen.vx = 0;
+			ghostGreen.vy = 1;
 			break;
 		case Direction.RIGHT:
-			fantasmaVerde.vx = 1;
-			fantasmaVerde.vy = 0;
+			ghostGreen.vx = 1;
+			ghostGreen.vy = 0;
 			break;
 		case Direction.LEFT:
-			fantasmaVerde.vx = -1;
-			fantasmaVerde.vy = 0;
+			ghostGreen.vx = -1;
+			ghostGreen.vy = 0;
 			break;
 	}
-	fantasmaVerde.x += fantasmaVerde.vx * 2.5;
-	fantasmaVerde.y += fantasmaVerde.vy * 2.5;
+	ghostGreen.x += ghostGreen.vx * 2.5;
+	ghostGreen.y += ghostGreen.vy * 2.5;
 }
 function numeroAleatorio() {
 	var max = 4;
@@ -307,82 +251,82 @@ function nuevaDireccionNaranja(direccion, horizontal, vertical) {
 	return direccion;
 }
 function moverFantasmaNaranja() {
-	if (fantasmaNaranja.direccion === Direction.LEFT || fantasmaNaranja.direccion === Direction.RIGHT) {
-		if (limite(Direction.UP, fantasmaNaranja.x, fantasmaNaranja.y) ||
-				limite(Direction.DOWN, fantasmaNaranja.x, fantasmaNaranja.y)) {
-			fantasmaNaranja.direccion = nuevaDireccionNaranja(fantasmaNaranja.direccion, fantasmaNaranja.x, fantasmaNaranja.y);
+	if (ghostOrange.direccion === Direction.LEFT || ghostOrange.direccion === Direction.RIGHT) {
+		if (limite(Direction.UP, ghostOrange.x, ghostOrange.y) ||
+				limite(Direction.DOWN, ghostOrange.x, ghostOrange.y)) {
+			ghostOrange.direccion = nuevaDireccionNaranja(ghostOrange.direccion, ghostOrange.x, ghostOrange.y);
 		}
-	} else if (limite(Direction.LEFT, fantasmaNaranja.x, fantasmaNaranja.y) ||
-			limite(Direction.RIGHT, fantasmaNaranja.x, fantasmaNaranja.y)) {
-		fantasmaNaranja.direccion = nuevaDireccionNaranja(fantasmaNaranja.direccion, fantasmaNaranja.x, fantasmaNaranja.y);
-	} else if (!limite(fantasmaNaranja.direccion, fantasmaNaranja.x, fantasmaNaranja.y)) {
-		fantasmaNaranja.direccion = nuevaDireccionNaranja(fantasmaNaranja.direccion, fantasmaNaranja.x, fantasmaNaranja.y);
+	} else if (limite(Direction.LEFT, ghostOrange.x, ghostOrange.y) ||
+			limite(Direction.RIGHT, ghostOrange.x, ghostOrange.y)) {
+		ghostOrange.direccion = nuevaDireccionNaranja(ghostOrange.direccion, ghostOrange.x, ghostOrange.y);
+	} else if (!limite(ghostOrange.direccion, ghostOrange.x, ghostOrange.y)) {
+		ghostOrange.direccion = nuevaDireccionNaranja(ghostOrange.direccion, ghostOrange.x, ghostOrange.y);
 	}
-	if (fantasmaNaranja.x < 0) {
-		fantasmaNaranja.x = canvas.width;
+	if (ghostOrange.x < 0) {
+		ghostOrange.x = canvas.width;
 	}
-	if (fantasmaNaranja.x > canvas.width) {
-		fantasmaNaranja.x = 0;
+	if (ghostOrange.x > canvas.width) {
+		ghostOrange.x = 0;
 	}
-	switch (fantasmaNaranja.direccion) {
+	switch (ghostOrange.direccion) {
 		case Direction.UP:
-			fantasmaNaranja.vx = 0;
-			fantasmaNaranja.vy = -1;
+			ghostOrange.vx = 0;
+			ghostOrange.vy = -1;
 			break;
 		case Direction.DOWN:
-			fantasmaNaranja.vx = 0;
-			fantasmaNaranja.vy = 1;
+			ghostOrange.vx = 0;
+			ghostOrange.vy = 1;
 			break;
 		case Direction.RIGHT:
-			fantasmaNaranja.vx = 1;
-			fantasmaNaranja.vy = 0;
+			ghostOrange.vx = 1;
+			ghostOrange.vy = 0;
 			break;
 		case Direction.LEFT:
-			fantasmaNaranja.vx = -1;
-			fantasmaNaranja.vy = 0;
+			ghostOrange.vx = -1;
+			ghostOrange.vy = 0;
 			break;
 	}
-	fantasmaNaranja.x += fantasmaNaranja.vx * 5;
-	fantasmaNaranja.y += fantasmaNaranja.vy * 5;
+	ghostOrange.x += ghostOrange.vx * 5;
+	ghostOrange.y += ghostOrange.vy * 5;
 }
 function moverFantasmaRosa() {
-	if (fantasmaRosa.direccion === Direction.LEFT || fantasmaRosa.direccion === Direction.RIGHT) {
-		if (limite(Direction.UP, fantasmaRosa.x, fantasmaRosa.y) ||
-				limite(Direction.DOWN, fantasmaRosa.x, fantasmaRosa.y)) {
-			fantasmaRosa.direccion = nuevaDireccionNaranja(fantasmaRosa.direccion, fantasmaRosa.x, fantasmaRosa.y);
+	if (ghostPink.direccion === Direction.LEFT || ghostPink.direccion === Direction.RIGHT) {
+		if (limite(Direction.UP, ghostPink.x, ghostPink.y) ||
+				limite(Direction.DOWN, ghostPink.x, ghostPink.y)) {
+			ghostPink.direccion = nuevaDireccionNaranja(ghostPink.direccion, ghostPink.x, ghostPink.y);
 		}
-	} else if (limite(Direction.LEFT, fantasmaRosa.x, fantasmaRosa.y) ||
-			limite(Direction.RIGHT, fantasmaRosa.x, fantasmaRosa.y)) {
-		fantasmaRosa.direccion = nuevaDireccionNaranja(fantasmaRosa.direccion, fantasmaRosa.x, fantasmaRosa.y);
-	} else if (!limite(fantasmaRosa.direccion, fantasmaRosa.x, fantasmaRosa.y)) {
-		fantasmaRosa.direccion = nuevaDireccionNaranja(fantasmaRosa.direccion, fantasmaRosa.x, fantasmaRosa.y);
+	} else if (limite(Direction.LEFT, ghostPink.x, ghostPink.y) ||
+			limite(Direction.RIGHT, ghostPink.x, ghostPink.y)) {
+		ghostPink.direccion = nuevaDireccionNaranja(ghostPink.direccion, ghostPink.x, ghostPink.y);
+	} else if (!limite(ghostPink.direccion, ghostPink.x, ghostPink.y)) {
+		ghostPink.direccion = nuevaDireccionNaranja(ghostPink.direccion, ghostPink.x, ghostPink.y);
 	}
-	if (fantasmaRosa.x < 0) {
-		fantasmaRosa.x = canvas.width;
+	if (ghostPink.x < 0) {
+		ghostPink.x = canvas.width;
 	}
-	if (fantasmaRosa.x > canvas.width) {
-		fantasmaRosa.x = 0;
+	if (ghostPink.x > canvas.width) {
+		ghostPink.x = 0;
 	}
-	switch (fantasmaRosa.direccion) {
+	switch (ghostPink.direccion) {
 		case Direction.UP:
-			fantasmaRosa.vx = 0;
-			fantasmaRosa.vy = -1;
+			ghostPink.vx = 0;
+			ghostPink.vy = -1;
 			break;
 		case Direction.DOWN:
-			fantasmaRosa.vx = 0;
-			fantasmaRosa.vy = 1;
+			ghostPink.vx = 0;
+			ghostPink.vy = 1;
 			break;
 		case Direction.RIGHT:
-			fantasmaRosa.vx = 1;
-			fantasmaRosa.vy = 0;
+			ghostPink.vx = 1;
+			ghostPink.vy = 0;
 			break;
 		case Direction.LEFT:
-			fantasmaRosa.vx = -1;
-			fantasmaRosa.vy = 0;
+			ghostPink.vx = -1;
+			ghostPink.vy = 0;
 			break;
 	}
-	fantasmaRosa.x += fantasmaRosa.vx * 5;
-	fantasmaRosa.y += fantasmaRosa.vy * 5;
+	ghostPink.x += ghostPink.vx * 5;
+	ghostPink.y += ghostPink.vy * 5;
 }
 function moverFantasmas() {
 	moverFantasmaRojo();
