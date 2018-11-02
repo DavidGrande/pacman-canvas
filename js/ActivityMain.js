@@ -18,10 +18,10 @@ var Direction = {
 
 var pacman = new Pacman();
 
-var ghostRed = new Ghost(420, 345, "#F00", 5);
-var ghostOrange = new Ghost(420, 345, "#F90", 5);
-var ghostGreen = new Ghost(420, 345, "#0F0", 2.5);
-var ghostPink = new Ghost(420, 345, "#F99", 5);
+var ghostRed = new GhostFollower(420, 345, "#F00", 5);
+var ghostOrange = new GhostRandom(420, 345, "#F90", 5);
+var ghostGreen = new GhostFollower(420, 345, "#0F0", 2.5);
+var ghostPink = new GhostRandom(420, 345, "#F99", 5);
 
 function draw() {
 	map.draw();
@@ -182,89 +182,12 @@ function nuevaDireccionNaranja(direccion, horizontal, vertical) {
 	} while (direccion === dirContraria);
 	return direccion;
 }
-function moverFantasmaNaranja() {
-	if (ghostOrange.direccion === Direction.LEFT || ghostOrange.direccion === Direction.RIGHT) {
-		if (limite(Direction.UP, ghostOrange.x, ghostOrange.y) ||
-				limite(Direction.DOWN, ghostOrange.x, ghostOrange.y)) {
-			ghostOrange.direccion = nuevaDireccionNaranja(ghostOrange.direccion, ghostOrange.x, ghostOrange.y);
-		}
-	} else if (limite(Direction.LEFT, ghostOrange.x, ghostOrange.y) ||
-			limite(Direction.RIGHT, ghostOrange.x, ghostOrange.y)) {
-		ghostOrange.direccion = nuevaDireccionNaranja(ghostOrange.direccion, ghostOrange.x, ghostOrange.y);
-	} else if (!limite(ghostOrange.direccion, ghostOrange.x, ghostOrange.y)) {
-		ghostOrange.direccion = nuevaDireccionNaranja(ghostOrange.direccion, ghostOrange.x, ghostOrange.y);
-	}
-	if (ghostOrange.x < 0) {
-		ghostOrange.x = canvas.width;
-	}
-	if (ghostOrange.x > canvas.width) {
-		ghostOrange.x = 0;
-	}
-	switch (ghostOrange.direccion) {
-		case Direction.UP:
-			ghostOrange.vx = 0;
-			ghostOrange.vy = -1;
-			break;
-		case Direction.DOWN:
-			ghostOrange.vx = 0;
-			ghostOrange.vy = 1;
-			break;
-		case Direction.RIGHT:
-			ghostOrange.vx = 1;
-			ghostOrange.vy = 0;
-			break;
-		case Direction.LEFT:
-			ghostOrange.vx = -1;
-			ghostOrange.vy = 0;
-			break;
-	}
-	ghostOrange.x += ghostOrange.vx * 5;
-	ghostOrange.y += ghostOrange.vy * 5;
-}
-function moverFantasmaRosa() {
-	if (ghostPink.direccion === Direction.LEFT || ghostPink.direccion === Direction.RIGHT) {
-		if (limite(Direction.UP, ghostPink.x, ghostPink.y) ||
-				limite(Direction.DOWN, ghostPink.x, ghostPink.y)) {
-			ghostPink.direccion = nuevaDireccionNaranja(ghostPink.direccion, ghostPink.x, ghostPink.y);
-		}
-	} else if (limite(Direction.LEFT, ghostPink.x, ghostPink.y) ||
-			limite(Direction.RIGHT, ghostPink.x, ghostPink.y)) {
-		ghostPink.direccion = nuevaDireccionNaranja(ghostPink.direccion, ghostPink.x, ghostPink.y);
-	} else if (!limite(ghostPink.direccion, ghostPink.x, ghostPink.y)) {
-		ghostPink.direccion = nuevaDireccionNaranja(ghostPink.direccion, ghostPink.x, ghostPink.y);
-	}
-	if (ghostPink.x < 0) {
-		ghostPink.x = canvas.width;
-	}
-	if (ghostPink.x > canvas.width) {
-		ghostPink.x = 0;
-	}
-	switch (ghostPink.direccion) {
-		case Direction.UP:
-			ghostPink.vx = 0;
-			ghostPink.vy = -1;
-			break;
-		case Direction.DOWN:
-			ghostPink.vx = 0;
-			ghostPink.vy = 1;
-			break;
-		case Direction.RIGHT:
-			ghostPink.vx = 1;
-			ghostPink.vy = 0;
-			break;
-		case Direction.LEFT:
-			ghostPink.vx = -1;
-			ghostPink.vy = 0;
-			break;
-	}
-	ghostPink.x += ghostPink.vx * 5;
-	ghostPink.y += ghostPink.vy * 5;
-}
+
 function moverFantasmas() {
 	ghostRed.move();
-	moverFantasmaNaranja();
+	ghostOrange.move();
 	ghostGreen.move();
-	moverFantasmaRosa();
+	ghostPink.move();
 }
 var tecla;
 var pausa = true;
