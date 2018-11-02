@@ -14,7 +14,6 @@ body {
     margin: 0 auto;
     height: 80vh;
 }
-/*Fuente pacman*/
 @font-face {
     font-family: "Pacman";
     src: url("../font/pac-font.ttf");
@@ -58,7 +57,7 @@ h1 a:hover {
 h1 a:hover {
     color: #ffffff;
 }
-/*glow for webkit*/
+/*glow*/
 @-webkit-keyframes neon3 {
     from {
         text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #FFDD1B, 0 0 70px #FFDD1B, 0 0 80px #FFDD1B, 0 0 100px #FFDD1B, 0 0 150px #FFDD1B;
@@ -67,7 +66,6 @@ h1 a:hover {
         text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #FFDD1B, 0 0 35px #FFDD1B, 0 0 40px #FFDD1B, 0 0 50px #FFDD1B, 0 0 75px #FFDD1B;
     }
 }
-/*glow*/
 @keyframes neon1 {
     from {
         text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #FFDD1B, 0 0 70px #FFDD1B, 0 0 80px #FFDD1B, 0 0 100px #FFDD1B, 0 0 150px #FFDD1B;
