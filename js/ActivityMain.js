@@ -1,10 +1,6 @@
 /*Globals declarations*/
-var gameLayer = document.getElementById('game-layer');
-var cocoLayer = document.getElementById('coco-layer');
 var canvas = document.getElementById('canvas');
-var ctxGameLayer = gameLayer.getContext('2d');
-var ctxCocoLayer = cocoLayer.getContext('2d');
-var ctx = canvas.getContext('2d', { alpha: true });
+var ctx = canvas.getContext('2d');
 
 /*UNUSED*/
 var touch = new Touch(320, 250, 15, 15);
@@ -30,7 +26,6 @@ var ghostGreen = new GhostFollower(420, 345, "#0F0", 2.5);
 var ghostPink = new GhostRandom(420, 345, "#F99", 5);
 
 function draw() {
-	//map.draw();
 	ctx.clearRect(0,0,canvas.width, canvas.height);
 	pacman.draw();
 	
@@ -198,9 +193,8 @@ var tecla;
 var pausa = true;
 
 function interaccion(e) {
-	var KEY_SPACE = 32;
 	tecla = e.keyCode;
-	if (tecla === KEY_SPACE) {
+	if (tecla === 32) {
 		pausa = !pausa;
 	}
 	return false;
@@ -259,7 +253,6 @@ function accion() {
 				var auxX = Math.trunc((pacman.x) / 30);
 				if(map.arrayMapa[auxY][auxX] !== 1) {
 					map.arrayMapa[auxY][auxX] = 1;
-					ctxCocoLayer.clearRect(0,0,canvas.width, canvas.height);
 					map.drawCocos();
 					puntos += 10;
 					document.getElementById("puntos").innerHTML = puntos;
