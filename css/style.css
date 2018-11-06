@@ -4,13 +4,28 @@ body {
 }
 .juego{
     text-align: center;
-    width: 100%;
+    /*width: 100%;*/
     padding: 1em 0 1em 0;
+	height: 930px;
+	width: 840px;
+	position: relative;
 }
 .juego p{
     color: white;
 }
+#game-layer{
+	z-index: 1;
+}
+#coco-layer{
+	z-index: 2;
+}
 #canvas{
+	z-index: 3;
+}
+#coco-layer,
+#game-layer,
+#canvas{
+	position: absolute;
     margin: 0 auto;
     height: 80vh;
 }
