@@ -6,8 +6,6 @@ body {
     text-align: center;
     /*width: 100%;*/
     padding: 1em 0 1em 0;
-	height: 930px;
-	width: 840px;
 	position: relative;
 }
 .juego p{
@@ -30,8 +28,10 @@ body {
 #game-layer,
 #canvas{
 	position: absolute;
-    margin: 0 auto;
-    height: 80vh;
+	margin: auto;
+	height: 80vh;
+	left: 0;
+	right: 0;
 }
 @font-face {
     font-family: "Pacman";
