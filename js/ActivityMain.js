@@ -2,14 +2,13 @@
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
 
-/*UNUSED*/
-var touch = new Touch(320, 250, 15, 15);
-
 var puntos = 0;
 var map = new Map();
 map.draw();
 map.drawCocos();
 
+var info = new Info();
+info.draw();
 var Direction = {
 	UP: 1,
 	DOWN: 2,
@@ -25,20 +24,13 @@ var ghostOrange = new GhostRandom(420, 345, "#F90", 5);
 var ghostGreen = new GhostFollower(420, 345, "#0F0", 2.5);
 var ghostPink = new GhostRandom(420, 345, "#F99", 5);
 
-function draw() {
+function drawCharacters() {
 	ctx.clearRect(0,0,canvas.width, canvas.height);
 	pacman.draw();
-	
 	ghostRed.draw();
 	ghostOrange.draw();
 	ghostGreen.draw();
 	ghostPink.draw();
-	if (pausa) {
-		ctx.font = "bold 22px sans-serif";
-		ctx.fillStyle = "#FFF";
-		ctx.fillText("Press Space to start", 300, 530);
-	}
-	//touch.draw();
 }
 
 function limit(direccion, horizontal, vertical) {
@@ -190,18 +182,19 @@ function moverFantasmas() {
 	ghostPink.move();
 }
 var tecla;
-var pausa = true;
 
 function interaccion(e) {
 	tecla = e.keyCode;
 	if (tecla === 32) {
-		pausa = !pausa;
+		var pausa = info.pausa;
+		info.pausa = !pausa;
+		info.draw();
 	}
 	return false;
 }
 
 function accion() {
-	draw();
+	drawCharacters();
 	var KEY_LEFT = 37;
 	var KEY_UP = 38;
 	var KEY_RIGHT = 39;
@@ -209,7 +202,7 @@ function accion() {
 	
 	document.onkeydown = interaccion;
 
-	if (!pausa) {
+	if (!info.pausa) {
 		switch (tecla) {
 			case KEY_DOWN:
 				if (limit(Direction.DOWN, pacman.x, pacman.y)) {

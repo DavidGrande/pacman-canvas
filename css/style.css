@@ -22,6 +22,10 @@ body {
 #canvas{
 	z-index: 3;
 }
+#info-layer{
+	z-index: 4;
+}
+#info-layer,
 #coco-layer,
 #game-layer,
 #canvas{
