@@ -7,11 +7,7 @@ class Touch{
         this.ancho = ancho;
         this.alto = alto;
     }
-
-    get area() {
-        return 2;
-    }
-
+	
     draw() {
         ctx.fillStyle = "rgba(200,200,200,0.2)";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
