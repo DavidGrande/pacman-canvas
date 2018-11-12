@@ -12,7 +12,7 @@ class Info{
 		if(this.pausa){
 			this.ctxInfoLayer.font = "bold 22px sans-serif";
 			this.ctxInfoLayer.fillStyle = "#FFF";
-			this.ctxInfoLayer.fillText("Press Space to start", 300, 530);
+			this.ctxInfoLayer.fillText("Press Space to start", 315, 530);
 		}
 	}
 }

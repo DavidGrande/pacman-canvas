@@ -11,13 +11,26 @@
 			<h1><a>PAC-MAN</a></h1>
 			<p>Developed with &lt;canvas&gt;</p>
 		</header>
+		<div id="scores">
+			<p>Game Score: <span id="puntos">0</span></p>
+			<p>High Score: <span id="highScore">0</span></p>
+		</div>
 		<div class="juego">
 			<canvas id="game-layer" width="840" height="930"></canvas>
 			<canvas id="coco-layer" width="840" height="930"></canvas>
 			<canvas id="canvas" width="840" height="930"></canvas>
 			<canvas id="info-layer" width="840" height="930"></canvas>
 		</div>
-		<p>Score: <span id="puntos">0</span></p>
+		<div id="lifeAndRewards">
+			<div id="life">
+				<canvas id="life-1" width="20" height="20"></canvas>
+				<canvas id="life-2" width="20" height="20"></canvas>
+				<canvas id="life-3" width="20" height="20"></canvas>
+			</div>
+			<div id="Rewards">
+				
+			</div>
+		</div>
 		<!--div id="device" style="text-align: center; border:1px dotted black; color:green;"></div-->
 		<script type="text/javascript" src="js/Touch.js"></script>
 		<script type="text/javascript" src="js/PacDotLayer.js"></script>
@@ -25,6 +38,7 @@
 		<script type="text/javascript" src="js/Pacman.js"></script>
 		<script type="text/javascript" src="js/Ghost.js"></script>
 		<script type="text/javascript" src="js/Info.js"></script>
+		<script type="text/javascript" src="js/Life.js"></script>
 		<script type="text/javascript" src="js/ActivityMain.js"></script>
 	</body>
 </html>
