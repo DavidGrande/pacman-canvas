@@ -24,6 +24,8 @@ var ghostOrange = new GhostRandom(420, 345, "#F90", 5);
 var ghostGreen = new GhostFollower(420, 345, "#0F0", 2.5);
 var ghostPink = new GhostRandom(420, 345, "#F99", 5);
 
+drawCharacters();
+
 function drawCharacters() {
 	ctx.clearRect(0,0,canvas.width, canvas.height);
 	pacman.draw();
@@ -132,6 +134,7 @@ function moverFantasmas() {
 	ghostGreen.move();
 	ghostPink.move();
 }
+
 var tecla;
 
 function interaccion(e) {
@@ -140,83 +143,20 @@ function interaccion(e) {
 		var pausa = info.pausa;
 		info.pausa = !pausa;
 		info.draw();
-		audioWaka.pause();
+		pacman.audioWaka.pause();
 	}
 	return false;
 }
 
 function accion() {
-	drawCharacters();
-	var KEY_LEFT = 37;
-	var KEY_UP = 38;
-	var KEY_RIGHT = 39;
-	var KEY_DOWN = 40;
-	
 	document.onkeydown = interaccion;
-
 	if (!info.pausa) {
-		switch (tecla) {
-			case KEY_DOWN:
-				if (limit(Direction.DOWN, pacman.x, pacman.y)) {
-					pacman.vx = 0;
-					pacman.vy = 1;
-					pacman.direccion = Direction.DOWN;
-				}
-				break;
-			case KEY_UP:
-				if (limit(Direction.UP, pacman.x, pacman.y)) {
-					pacman.vx = 0;
-					pacman.vy = -1;
-					pacman.direccion = Direction.UP;
-				}
-				break;
-			case KEY_RIGHT:
-				if (limit(Direction.RIGHT, pacman.x, pacman.y)) {
-					pacman.vx = 1;
-					pacman.vy = 0;
-					pacman.direccion = Direction.RIGHT;
-				}
-				break;
-			case KEY_LEFT:
-				if (limit(Direction.LEFT, pacman.x, pacman.y)) {
-					pacman.vx = -1;
-					pacman.vy = 0;
-					pacman.direccion = Direction.LEFT;
-				}
-				break;
-		}
-		if (limit(pacman.direccion, pacman.x, pacman.y)) {
-			pacman.x += pacman.vx * 5;
-			pacman.y += pacman.vy * 5;
-			if (pacman.x < 0) {
-				pacman.x = canvas.width - 15;
-			} else if (pacman.x + 16 > canvas.width) {
-				pacman.x = 0;
-			}
-			if (estaCentrado(Direction.UP, pacman.x, pacman.y) && estaCentrado(Direction.LEFT, pacman.x, pacman.y)){
-				var auxY = Math.trunc((pacman.y) / 30);
-				var auxX = Math.trunc((pacman.x) / 30);
-				if(map.arrayMapa[auxY][auxX] !== 1) {
-					map.arrayMapa[auxY][auxX] = 1;
-					map.drawCocos();
-					puntos += 10;
-					document.getElementById("puntos").innerHTML = puntos;
-					audioWaka.play();
-				} else {
-					audioWaka.pause();
-				}
-			}
-		} else {
-			pacman.direccion = Direction.DEFAULT;
-			audioWaka.pause();
-		}
+		pacman.interaccion(tecla);
+		pacman.move();
 		moverFantasmas();
+		drawCharacters();
 	}
 	window.requestAnimationFrame(accion);
 }
-
-var audioWaka = document.getElementById("soundWaka");
-
-
 
 document.addEventListener("load", accion());
