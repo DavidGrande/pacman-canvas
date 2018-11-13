@@ -79,7 +79,7 @@ class Pacman {
 				break;
 		}
 	}
-	
+
 	move(){
 		if (limit(this.direccion, this.x, this.y)) {
 			this.x += this.vx * 5;
@@ -92,10 +92,17 @@ class Pacman {
 			if (estaCentrado(Direction.UP, this.x, this.y) && estaCentrado(Direction.LEFT, this.x, this.y)){
 				var auxY = Math.trunc((this.y) / 30);
 				var auxX = Math.trunc((this.x) / 30);
-				if(map.arrayMapa[auxY][auxX] !== 1) {
+				var cell = map.arrayMapa[auxY][auxX];
+				if(cell !== 1) {
 					map.arrayMapa[auxY][auxX] = 1;
 					map.drawCocos();
-					puntos += 10;
+					if(cell === 3){
+						this.eatedBigCoco = true;
+						threadPacmanEatBigDot(this);
+						puntos += 30;	
+					} else {
+						puntos += 10;
+					}
 					document.getElementById("puntos").innerHTML = puntos;
 					this.audioWaka.play();
 				} else {
@@ -107,4 +114,10 @@ class Pacman {
 			this.audioWaka.pause();
 		}
 	}
+}
+
+function threadPacmanEatBigDot(pac){
+	setTimeout(function(){
+		pac.eatedBigCoco = false;
+	}, 2000);
 }
