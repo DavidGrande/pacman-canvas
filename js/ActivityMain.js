@@ -64,76 +64,22 @@ function limit(direccion, horizontal, vertical) {
 }
 
 function estaCentrado(direccion, horizontal, vertical) {
-	if (direccion === Direction.UP || direccion === Direction.DOWN) {
-		if (Math.trunc((horizontal) / 30) * 30 + 15 === horizontal) {
-			return true;
-		}
-	} else if (direccion === Direction.RIGHT || direccion === Direction.LEFT) {
-		if (Math.trunc((vertical) / 30) * 30 + 15 === vertical) {
-			return true;
-		}
+	var centrado = false;
+	switch(direccion){
+		case Direction.UP:
+		case Direction.DOWN:
+			if (Math.trunc((horizontal) / 30) * 30 + 15 === horizontal) {
+				centrado = true;
+			}
+			break;
+		case Direction.RIGHT:
+		case Direction.LEFT:
+			if (Math.trunc((vertical) / 30) * 30 + 15 === vertical) {
+				centrado = true;
+			}
+			break;
 	}
-	return false;
-}
-function perserguirComecocos(horizontal, vertical) {
-	var direcciones = ["", ""];
-	var recorridox = horizontal - pacman.x;
-	var recorridoy = vertical - pacman.y;
-	if (Math.abs(recorridox) >= Math.abs(recorridoy)) {
-		if (horizontal <= pacman.x) {
-			direcciones[0] = Direction.RIGHT;
-			if (limit(Direction.RIGHT, horizontal, vertical)) {
-				direcciones[1] = Direction.RIGHT;
-			} else {
-				if (vertical >= pacman.y && limit(Direction.UP, horizontal, vertical)) {
-					direcciones[1] = Direction.UP;
-				} else if (limit(Direction.DOWN, horizontal, vertical)) {
-					direcciones[1] = Direction.DOWN;
-				} else {
-					direcciones[1] = Direction.LEFT;
-				}
-			}
-		} else {
-			direcciones[0] = Direction.LEFT;
-			if (limit(Direction.LEFT, horizontal, vertical)) {
-				direcciones[1] = Direction.LEFT;
-			} else {
-				if (vertical >= pacman.y && limit(Direction.UP, horizontal, vertical)) {
-					direcciones[1] = Direction.UP;
-				} else if (limit(Direction.DOWN, horizontal, vertical)) {
-					direcciones[1] = Direction.DOWN;
-				} else {
-					direcciones[1] = Direction.LEFT;
-				}
-			}
-
-		}
-	} else {
-		if (vertical >= pacman.y) {
-			direcciones[0] = Direction.UP;
-			if (limit(Direction.UP, horizontal, vertical)) {
-				direcciones[1] = Direction.UP;
-			} else {
-				if (horizontal <= pacman.x && limit(Direction.RIGHT, horizontal, vertical)) {
-					direcciones[1] = Direction.RIGHT;
-				} else {
-					direcciones[1] = Direction.LEFT;
-				}
-			}
-		} else {
-			direcciones[0] = Direction.DOWN;
-			if (limit(Direction.DOWN, horizontal, vertical)) {
-				direcciones[1] = Direction.DOWN;
-			} else {
-				if (horizontal <= pacman.x && limit(Direction.RIGHT, horizontal, vertical)) {
-					direcciones[1] = Direction.RIGHT;
-				} else {
-					direcciones[1] = Direction.LEFT;
-				}
-			}
-		}
-	}
-	return direcciones;
+	return centrado;
 }
 
 function numeroAleatorio() {
@@ -150,9 +96,9 @@ function direccionAleatoria(horizontal, vertical) {
 	return direccion;
 }
 
-function newDirection(direccion, horizontal, vertical) {
+function getOppositeDirection(direction){
 	var dirContraria;
-	switch (direccion) {
+	switch (direction) {
 		case Direction.UP:
 			dirContraria = Direction.DOWN;
 			break;
@@ -169,6 +115,11 @@ function newDirection(direccion, horizontal, vertical) {
 			dirContraria = Direction.DEFAULT;
 			break;
 	}
+	return dirContraria;
+}
+
+function newDirection(direccion, horizontal, vertical) {
+	var dirContraria = getOppositeDirection(direccion);
 	do {
 		direccion = direccionAleatoria(horizontal, vertical);
 	} while (direccion === dirContraria);
@@ -189,6 +140,7 @@ function interaccion(e) {
 		var pausa = info.pausa;
 		info.pausa = !pausa;
 		info.draw();
+		audioWaka.pause();
 	}
 	return false;
 }
@@ -249,14 +201,22 @@ function accion() {
 					map.drawCocos();
 					puntos += 10;
 					document.getElementById("puntos").innerHTML = puntos;
+					audioWaka.play();
+				} else {
+					audioWaka.pause();
 				}
 			}
 		} else {
 			pacman.direccion = Direction.DEFAULT;
+			audioWaka.pause();
 		}
 		moverFantasmas();
 	}
 	window.requestAnimationFrame(accion);
 }
+
+var audioWaka = document.getElementById("soundWaka");
+
+
 
 document.addEventListener("load", accion());

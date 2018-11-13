@@ -1,4 +1,4 @@
-/* global Direction, ctx, canvas */
+/* global Direction, ctx, canvas, pacman */
 
 class Ghost {
 	constructor(x, y, color, speed) {
@@ -63,18 +63,77 @@ class Ghost {
 
 class GhostFollower extends Ghost {
 	move() {
-		var dirChanged = false;
 		if (!limit(this.direccion, this.x, this.y) || limit(this.direccionCorrecta, this.x, this.y)) {
-			var arrayDirecciones = perserguirComecocos(this.x, this.y);
-			this.direccion = arrayDirecciones[1];
-			this.direccionCorrecta = arrayDirecciones[0];
-			dirChanged = true;
-		}
-		if(dirChanged){
+			this.followPacman(this.x, this.y);
 			this.changeDirection();
 		}
 		this.x += this.vx * this.speed;
 		this.y += this.vy * this.speed;
+	}
+	
+	followPacman(x, y) {
+		var goTo;
+		var recorridox = Math.abs(x - pacman.x);
+		var recorridoy = Math.abs(y - pacman.y);
+		if (recorridox >= recorridoy) {
+			if (x <= pacman.x) {
+				this.direccionCorrecta = Direction.RIGHT;
+				if (limit(Direction.RIGHT, x, y)) {
+					goTo = Direction.RIGHT;
+				} else {
+					goTo = this.newVerticalRute(x, y);
+				}
+			} else {
+				this.direccionCorrecta = Direction.LEFT;
+				if (limit(Direction.LEFT, x, y)) {
+					goTo = Direction.LEFT;
+				} else {
+					goTo = this.newVerticalRute(x, y);
+				}
+
+			}
+		} else {
+			if (y >= pacman.y) {
+				this.direccionCorrecta = Direction.UP;
+				if (limit(Direction.UP, x, y)) {
+					goTo = Direction.UP;
+				} else {
+					goTo = this.newHorizontalRute(x, y);
+				}
+			} else {
+				this.direccionCorrecta = Direction.DOWN;
+				if (limit(Direction.DOWN, x, y)) {
+					goTo = Direction.DOWN;
+				} else {
+					goTo = this.newHorizontalRute(x, y);
+				}
+			}
+		}
+		this.direccion = goTo;
+	}
+	
+	newVerticalRute(horizontal, vertical){
+		var result;
+		if (vertical >= pacman.y && limit(Direction.UP, horizontal, vertical)) {
+			result = Direction.UP;
+		} else if (limit(Direction.DOWN, horizontal, vertical)) {
+			result = Direction.DOWN;
+		} else {
+			result = getOppositeDirection(this.direccionCorrecta);
+		}
+		return result;
+	}
+	
+	newHorizontalRute(horizontal, vertical){
+		var result;
+		if (horizontal <= pacman.x && limit(Direction.RIGHT, horizontal, vertical)) {
+			result = Direction.RIGHT;
+		} else if (limit(Direction.LEFT, horizontal, vertical)) {
+			result = Direction.LEFT;
+		} else {
+			result = getOppositeDirection(this.direccionCorrecta);
+		}
+		return result;
 	}
 };
 
