@@ -17,22 +17,18 @@ var Direction = {
 	DEFAULT: 0
 };
 
-var pacman = new Pacman();
+var lifes = new Lifes();
+lifes.drawAll();
 
-var ghostRed = new GhostFollower(420, 345, "#F00", 5);
-var ghostOrange = new GhostRandom(420, 345, "#F90", 5);
-var ghostGreen = new GhostFollower(420, 345, "#0F0", 2.5);
-var ghostPink = new GhostRandom(420, 345, "#F99", 5);
+var pacman = new Pacman();
+var ghosts = new Ghosts();
 
 drawCharacters();
 
 function drawCharacters() {
 	ctx.clearRect(0,0,canvas.width, canvas.height);
 	pacman.draw();
-	ghostRed.draw();
-	ghostOrange.draw();
-	ghostGreen.draw();
-	ghostPink.draw();
+	ghosts.drawAll();
 }
 
 function limit(direccion, horizontal, vertical) {
@@ -128,11 +124,19 @@ function newDirection(direccion, horizontal, vertical) {
 	return direccion;
 }
 
-function moverFantasmas() {
-	ghostRed.move();
-	ghostOrange.move();
-	ghostGreen.move();
-	ghostPink.move();
+function lose(){
+	if(lifes.lifes > 0){
+		lifes.loseOne();
+		ghosts.resetPositions();
+		pacman.resetPosition();
+		pausa = info.pausa;
+		info.pausa = !pausa;
+		info.draw();
+	} else {
+		pausa = info.pausa;
+		info.pausa = !pausa;
+		info.drawGameOver();
+	}
 }
 
 var tecla;
@@ -153,7 +157,15 @@ function accion() {
 	if (!info.pausa) {
 		pacman.interaccion(tecla);
 		pacman.move();
-		moverFantasmas();
+		ghosts.moveAll();
+		var deted = ghosts.detectTouchedGhost(pacman.x, pacman.y);
+		if(deted){
+			if(pacman.eatedBigCoco){
+				//ghostX.die
+			} else {
+				lose();
+			}
+		}
 		drawCharacters();
 	}
 	window.requestAnimationFrame(accion);

@@ -15,4 +15,10 @@ class Info{
 			this.ctxInfoLayer.fillText("Press Space to start", 315, 530);
 		}
 	}
+	
+	drawGameOver(){
+		this.ctxInfoLayer.font = "bold 22px sans-serif";
+		this.ctxInfoLayer.fillStyle = "#FFF";
+		this.ctxInfoLayer.fillText("GAME OVER", 330, 530);
+	}
 }

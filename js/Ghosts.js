@@ -1,5 +1,48 @@
 /* global Direction, ctx, canvas, pacman */
 
+class Ghosts {
+	constructor(){
+		this.ghostRed = new GhostFollower(420, 345, "#F00", 5);
+		this.ghostOrange = new GhostRandom(420, 345, "#F90", 5);
+		this.ghostGreen = new GhostFollower(420, 345, "#0F0", 2.5);
+		this.ghostPink = new GhostRandom(420, 345, "#F99", 5);
+	}
+	
+	drawAll(){
+		this.ghostRed.draw();
+		this.ghostOrange.draw();
+		this.ghostGreen.draw();
+		this.ghostPink.draw();
+	}
+	
+	moveAll(){
+		this.ghostRed.move();
+		this.ghostOrange.move();
+		this.ghostGreen.move();
+		this.ghostPink.move();
+	}
+	
+	detectTouchedGhost(x, y){
+		var detected = false;
+		detected = this.ghostRed.ghostOverPacman(x, y);
+		if(!detected){
+			detected = this.ghostOrange.ghostOverPacman(x, y);
+		}else if(!detected){
+			detected = this.ghostGreen.ghostOverPacman(x, y);
+		}else if(!detected){
+			detected = this.ghostPink.ghostOverPacman(x, y);
+		}
+		return detected;
+	}
+	
+	resetPositions(){
+		this.ghostRed.resetPosition(420, 345);
+		this.ghostOrange.resetPosition(420, 345);
+		this.ghostGreen.resetPosition(420, 345);
+		this.ghostPink.resetPosition(420, 345);
+	}
+}
+
 class Ghost {
 	constructor(x, y, color, speed) {
 		this.x = x,
@@ -37,6 +80,19 @@ class Ghost {
 		ctx.fillStyle = "#000";
 		ctx.fillRect(this.x - 7, this.y - 4, 2, 3);
 		ctx.fillRect(this.x + 5, this.y - 4, 2, 3);
+	}
+
+	resetPosition(x , y){
+		this.x = x;
+		this.y = y;
+	}
+
+	ghostOverPacman(x, y){
+		var result = false;
+		if(x-40 <= this.x && x+40 >= this.x && y-40 <= this.y && y+40 >= this.y){
+			result = true;
+		}
+		return result;
 	}
 
 	changeDirection(){

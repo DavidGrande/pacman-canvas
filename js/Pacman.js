@@ -8,6 +8,7 @@ class Pacman {
 		this.vy = 0;
 		this.radio = 20;
 		this.direccion = Direction.DEFAULT;
+		this.eatedBigCoco = false;
 		
 		this.audioWaka = document.getElementById("soundWaka");
 	}
@@ -34,6 +35,12 @@ class Pacman {
 		}
 		ctx.lineTo(this.x, this.y);
 		ctx.fill();
+	}
+	
+	resetPosition(){
+		this.x = 420;
+		this.y = 705;
+		this.direccion = Direction.DEFAULT;
 	}
 	
 	interaccion(key){

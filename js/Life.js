@@ -46,7 +46,3 @@ class Lifes{
 		}
 	}
 }
-
-var lifes = new Lifes();
-lifes.drawAll();
-
