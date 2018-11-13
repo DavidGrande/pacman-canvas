@@ -9,6 +9,9 @@ body {
 	position: relative;
 	height: 80vh;
 }
+#sounds{
+	display: none;
+}
 #scores,
 #lifeAndRewards{
 	color: white;

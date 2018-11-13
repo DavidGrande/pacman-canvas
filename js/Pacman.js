@@ -10,7 +10,7 @@ class Pacman {
 		this.direccion = Direction.DEFAULT;
 		this.eatedBigCoco = false;
 		
-		this.audioWaka = document.getElementById("soundWaka");
+		this.audioWaka = document.getElementById("soundPacmanEating");
 	}
 	
 	draw() {
