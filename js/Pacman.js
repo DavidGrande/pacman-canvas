@@ -37,6 +37,10 @@ class Pacman {
 		ctx.fill();
 	}
 	
+	drawDie(){
+		return threadPacmanDie(this);
+	}
+	
 	resetPosition(){
 		this.x = 420;
 		this.y = 705;
@@ -120,4 +124,28 @@ function threadPacmanEatBigDot(pac){
 	setTimeout(function(){
 		pac.eatedBigCoco = false;
 	}, 2000);
+}
+
+function threadPacmanDie(pac) {
+    var deegres1 = 0;
+    var deegres2 = Math.PI;
+    var acrInterval = setInterval (function() {
+	  ctx.fillStyle = "rgb(255,255,0)";
+      ctx.clearRect( 0, 0, canvas.width, canvas.height );
+      ctx.beginPath();
+      ctx.arc(pac.x, pac.y, pac.radio, Math.PI + deegres2, Math.PI, true);
+      ctx.lineTo(pac.x, pac.y);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(pac.x, pac.y, pac.radio, 3.14, deegres1, true);
+      ctx.lineTo(pac.x, pac.y);
+      ctx.fill();
+      deegres1 += 0.1;
+      deegres2 -= 0.1;
+      if(deegres1 > Math.PI || deegres2 < 0){
+        clearInterval(acrInterval);
+		ctx.clearRect( 0, 0, canvas.width, canvas.height);
+      }
+    }, 30);
+	return true;
 }

@@ -123,7 +123,7 @@ function newDirection(direccion, horizontal, vertical) {
 	} while (direccion === dirContraria);
 	return direccion;
 }
-
+//var value = false;
 function lose(){
 	if(lifes.lifes > 0){
 		lifes.loseOne();
@@ -137,6 +137,11 @@ function lose(){
 		info.pausa = !pausa;
 		info.drawGameOver();
 	}
+	/*I HAVE TO FIX HOW PACMAN HOW*/
+	/*value = pacman.drawDie();
+	while(value === false){
+		1 * 1;
+	}*/
 }
 
 var tecla;
