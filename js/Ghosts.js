@@ -23,14 +23,18 @@ class Ghosts {
 	}
 	
 	detectTouchedGhost(x, y){
-		var detected = false;
-		detected = this.ghostRed.ghostOverPacman(x, y);
-		if(!detected){
-			detected = this.ghostOrange.ghostOverPacman(x, y);
-		}else if(!detected){
-			detected = this.ghostGreen.ghostOverPacman(x, y);
-		}else if(!detected){
-			detected = this.ghostPink.ghostOverPacman(x, y);
+		var detected = [];
+		if(this.ghostRed.ghostOverPacman(x, y)){
+			detected.push(this.ghostRed);
+		}
+		if(this.ghostOrange.ghostOverPacman(x, y)){
+			detected.push(this.ghostOrange);
+		}
+		if(this.ghostGreen.ghostOverPacman(x, y)){
+			detected.push(this.ghostGreen);
+		}
+		if(this.ghostPink.ghostOverPacman(x, y)){
+			detected.push(this.ghostPink);
 		}
 		return detected;
 	}

@@ -187,8 +187,11 @@ function accion() {
 			}
 			ghosts.moveAll();
 			var deted = ghosts.detectTouchedGhost(pacman.x, pacman.y);
-			if (deted) {
+			if (deted.length > 0) {
 				if (pacman.eatedBigCoco) {
+					deted.forEach(function callback(ghost, index, array) {
+						ghost.resetPosition(420, 345);
+					});
 					//ghostX.die
 				} else {
 					lifes.loseOne();
