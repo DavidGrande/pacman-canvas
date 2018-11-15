@@ -7,7 +7,7 @@ class Info{
 		this.pausa = true;
 	}
 	
-	draw(){
+	drawPause(){
 		this.ctxInfoLayer.clearRect(0,0,canvas.width, canvas.height);
 		if(this.pausa){
 			this.ctxInfoLayer.font = "bold 22px sans-serif";
@@ -17,6 +17,7 @@ class Info{
 	}
 	
 	drawGameOver(){
+		this.ctxInfoLayer.clearRect(0,0,canvas.width, canvas.height);
 		this.ctxInfoLayer.font = "bold 22px sans-serif";
 		this.ctxInfoLayer.fillStyle = "#FFF";
 		this.ctxInfoLayer.fillText("GAME OVER", 330, 530);

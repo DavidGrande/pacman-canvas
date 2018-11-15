@@ -32,7 +32,6 @@ class Lifes{
 	}
 	loseOne(){
 		this.lifes--;
-		console.log(this.lifes);
 		switch(this.lifes){
 			case 2:
 				this.life3.clear();

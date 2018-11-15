@@ -1,7 +1,7 @@
 /* global ctx, Direction, map, puntos, canvas */
 
 class Pacman {
-	constructor (){
+	constructor() {
 		this.x = 420;
 		this.y = 705;
 		this.vx = 0;
@@ -9,10 +9,15 @@ class Pacman {
 		this.radio = 20;
 		this.direccion = Direction.DEFAULT;
 		this.eatedBigCoco = false;
-		
+		this.dying = false;
+
+		this.deegres1 = 0;
+		this.deegres2 = Math.PI;
+
+
 		this.audioWaka = document.getElementById("soundPacmanEating");
 	}
-	
+
 	draw() {
 		ctx.fillStyle = "rgb(255,255,0)";
 		ctx.beginPath();
@@ -36,18 +41,21 @@ class Pacman {
 		ctx.lineTo(this.x, this.y);
 		ctx.fill();
 	}
-	
-	drawDie(){
-		return threadPacmanDie(this);
+
+	drawDie() {
+		threadPacmanDie(this);
 	}
-	
-	resetPosition(){
+
+	resetPosition() {
 		this.x = 420;
 		this.y = 705;
 		this.direccion = Direction.DEFAULT;
+		this.dying = false;
+		this.deegres1 = 0;
+		this.deegres2 = Math.PI;
 	}
-	
-	interaccion(key){
+
+	interaccion(key) {
 		var KEY_LEFT = 37;
 		var KEY_UP = 38;
 		var KEY_RIGHT = 39;
@@ -84,7 +92,7 @@ class Pacman {
 		}
 	}
 
-	move(){
+	move() {
 		if (limit(this.direccion, this.x, this.y)) {
 			this.x += this.vx * 5;
 			this.y += this.vy * 5;
@@ -93,17 +101,17 @@ class Pacman {
 			} else if (this.x + 16 > canvas.width) {
 				this.x = 0;
 			}
-			if (estaCentrado(Direction.UP, this.x, this.y) && estaCentrado(Direction.LEFT, this.x, this.y)){
+			if (estaCentrado(Direction.UP, this.x, this.y) && estaCentrado(Direction.LEFT, this.x, this.y)) {
 				var auxY = Math.trunc((this.y) / 30);
 				var auxX = Math.trunc((this.x) / 30);
 				var cell = map.arrayMapa[auxY][auxX];
-				if(cell !== 1) {
+				if (cell !== 1) {
 					map.arrayMapa[auxY][auxX] = 1;
 					map.drawCocos();
-					if(cell === 3){
+					if (cell === 3) {
 						this.eatedBigCoco = true;
 						threadPacmanEatBigDot(this);
-						puntos += 30;	
+						puntos += 30;
 					} else {
 						puntos += 10;
 					}
@@ -120,32 +128,31 @@ class Pacman {
 	}
 }
 
-function threadPacmanEatBigDot(pac){
-	setTimeout(function(){
+function threadPacmanEatBigDot(pac) {
+	setTimeout(function () {
 		pac.eatedBigCoco = false;
 	}, 2000);
 }
 
 function threadPacmanDie(pac) {
-    var deegres1 = 0;
-    var deegres2 = Math.PI;
-    var acrInterval = setInterval (function() {
-	  ctx.fillStyle = "rgb(255,255,0)";
-      ctx.clearRect( 0, 0, canvas.width, canvas.height );
-      ctx.beginPath();
-      ctx.arc(pac.x, pac.y, pac.radio, Math.PI + deegres2, Math.PI, true);
-      ctx.lineTo(pac.x, pac.y);
-      ctx.fill();
-      ctx.beginPath();
-      ctx.arc(pac.x, pac.y, pac.radio, 3.14, deegres1, true);
-      ctx.lineTo(pac.x, pac.y);
-      ctx.fill();
-      deegres1 += 0.1;
-      deegres2 -= 0.1;
-      if(deegres1 > Math.PI || deegres2 < 0){
-        clearInterval(acrInterval);
-		ctx.clearRect( 0, 0, canvas.width, canvas.height);
-      }
-    }, 30);
-	return true;
+	var deegres1 = 0;
+	var deegres2 = Math.PI;
+	ctx.fillStyle = "rgb(255,255,0)";
+	ctx.clearRect(pac.x - pac.radio, pac.y - pac.radio, pac.radio * 2, pac.radio * 2);
+	ctx.beginPath();
+	ctx.arc(pac.x, pac.y, pac.radio, Math.PI + deegres2, Math.PI, true);
+	ctx.lineTo(pac.x, pac.y);
+	ctx.fill();
+	ctx.beginPath();
+	ctx.arc(pac.x, pac.y, pac.radio, 3.14, deegres1, true);
+	ctx.lineTo(pac.x, pac.y);
+	ctx.fill();
+	deegres1 += 0.01;
+	deegres2 -= 0.01;
+	console.log("PINTANDO PACMAN");
+	if (deegres1 < Math.PI || deegres2 > 0) {
+		pac.dying = false;
+		deegres1 = 0;
+		deegres2 = Math.PI;
+	}
 }

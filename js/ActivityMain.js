@@ -1,4 +1,3 @@
-/*Globals declarations*/
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
 
@@ -8,7 +7,7 @@ map.draw();
 map.drawCocos();
 
 var info = new Info();
-info.draw();
+info.drawPause();
 var Direction = {
 	UP: 1,
 	DOWN: 2,
@@ -125,23 +124,18 @@ function newDirection(direccion, horizontal, vertical) {
 }
 //var value = false;
 function lose(){
+	pausa = info.pausa;
+	info.pausa = !pausa;
 	if(lifes.lifes > 0){
 		lifes.loseOne();
-		ghosts.resetPositions();
-		pacman.resetPosition();
-		pausa = info.pausa;
-		info.pausa = !pausa;
-		info.draw();
+		info.drawPause();
 	} else {
 		pausa = info.pausa;
 		info.pausa = !pausa;
 		info.drawGameOver();
 	}
-	/*I HAVE TO FIX HOW PACMAN HOW*/
-	/*value = pacman.drawDie();
-	while(value === false){
-		1 * 1;
-	}*/
+
+	pacman.dying = true;
 }
 
 var tecla;
@@ -151,15 +145,17 @@ function interaccion(e) {
 	if (tecla === 32) {
 		var pausa = info.pausa;
 		info.pausa = !pausa;
-		info.draw();
+		info.drawPause();
 		pacman.audioWaka.pause();
 	}
 	return false;
 }
 
 function accion() {
-	document.onkeydown = interaccion;
-	if (!info.pausa) {
+	if(!pacman.dying){
+		document.onkeydown = interaccion;
+	}
+	if (!info.pausa && pacman.dying === false) {
 		pacman.interaccion(tecla);
 		pacman.move();
 		ghosts.moveAll();
@@ -173,7 +169,29 @@ function accion() {
 		}
 		drawCharacters();
 	}
+	if(pacman.dying){
+		var deegres1 = pacman.deegres1;
+		var deegres2 = pacman.deegres2;
+		ctx.fillStyle = "rgb(255,255,0)";
+		ctx.clearRect(pacman.x - pacman.radio, pacman.y - pacman.radio, pacman.radio * 2, pacman.radio * 2);
+		ctx.beginPath();
+		ctx.arc(pacman.x, pacman.y, pacman.radio, Math.PI + deegres2, Math.PI, true);
+		ctx.lineTo(pacman.x, pacman.y);
+		ctx.fill();
+		ctx.beginPath();
+		ctx.arc(pacman.x, pacman.y, pacman.radio, 3.14, deegres1, true);
+		ctx.lineTo(pacman.x, pacman.y);
+		ctx.fill();
+		pacman.deegres1 += 0.1;
+		pacman.deegres2 -= 0.1;
+		console.log("PINTANDO PACMAN");
+		if (deegres1 > Math.PI || deegres2 < 0) {
+			pacman.resetPosition();
+			ghosts.resetPositions();
+		}
+	}
 	window.requestAnimationFrame(accion);
+	
 }
 
 document.addEventListener("load", accion());
