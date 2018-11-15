@@ -1,3 +1,5 @@
+/* global Status */
+
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
 
@@ -6,8 +8,8 @@ var map = new Map();
 map.draw();
 map.drawCocos();
 
-var info = new Info();
-info.drawPause();
+var statusExecution = new StatusExecution(Status.PAUSE);
+statusExecution.status = Status.PAUSE;
 var Direction = {
 	UP: 1,
 	DOWN: 2,
@@ -25,9 +27,11 @@ var ghosts = new Ghosts();
 drawCharacters();
 
 function drawCharacters() {
-	ctx.clearRect(0,0,canvas.width, canvas.height);
-	pacman.draw();
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	ghosts.drawAll();
+	if (statusExecution.status !== Status.GAMEOVER) {
+		pacman.draw();
+	}
 }
 
 function limit(direccion, horizontal, vertical) {
@@ -62,7 +66,7 @@ function limit(direccion, horizontal, vertical) {
 
 function estaCentrado(direccion, horizontal, vertical) {
 	var centrado = false;
-	switch(direccion){
+	switch (direccion) {
 		case Direction.UP:
 		case Direction.DOWN:
 			if (Math.trunc((horizontal) / 30) * 30 + 15 === horizontal) {
@@ -93,7 +97,7 @@ function direccionAleatoria(horizontal, vertical) {
 	return direccion;
 }
 
-function getOppositeDirection(direction){
+function getOppositeDirection(direction) {
 	var dirContraria;
 	switch (direction) {
 		case Direction.UP:
@@ -122,76 +126,93 @@ function newDirection(direccion, horizontal, vertical) {
 	} while (direccion === dirContraria);
 	return direccion;
 }
-//var value = false;
-function lose(){
-	pausa = info.pausa;
-	info.pausa = !pausa;
-	if(lifes.lifes > 0){
-		lifes.loseOne();
-		info.drawPause();
-	} else {
-		pausa = info.pausa;
-		info.pausa = !pausa;
-		info.drawGameOver();
-	}
-
-	pacman.dying = true;
-}
 
 var tecla;
-
 function interaccion(e) {
-	tecla = e.keyCode;
-	if (tecla === 32) {
-		var pausa = info.pausa;
-		info.pausa = !pausa;
-		info.drawPause();
-		pacman.audioWaka.pause();
+	if (statusExecution.interactionAvailable) {
+		tecla = e.keyCode;
+		console.log(tecla);
+		if (tecla === 32) {
+			if (statusExecution.status === Status.RUN) {
+				statusExecution.status = Status.PAUSE;
+			} else {
+				statusExecution.status = Status.RUN;
+			}
+			pacman.audioWaka.pause();
+		}
+	} else {
+		tecla = null;
 	}
 	return false;
 }
 
-function accion() {
-	if(!pacman.dying){
-		document.onkeydown = interaccion;
-	}
-	if (!info.pausa && pacman.dying === false) {
-		pacman.interaccion(tecla);
-		pacman.move();
-		ghosts.moveAll();
-		var deted = ghosts.detectTouchedGhost(pacman.x, pacman.y);
-		if(deted){
-			if(pacman.eatedBigCoco){
-				//ghostX.die
+function canHeEatADot() {
+	var result = false;
+	if (estaCentrado(Direction.UP, pacman.x, pacman.y) && estaCentrado(Direction.LEFT, pacman.x, pacman.y)) {
+		var auxY = Math.trunc((pacman.y) / 30);
+		var auxX = Math.trunc((pacman.x) / 30);
+		var cell = map.arrayMapa[auxY][auxX];
+		if (cell !== 1) {
+			map.arrayMapa[auxY][auxX] = 1;
+			map.drawCocos();
+			if (cell === 3) {
+				pacman.eatedBigCoco = true;
+				threadPacmanEatBigDot(pacman);
+				puntos += 30;
 			} else {
-				lose();
+				puntos += 10;
 			}
+			document.getElementById("puntos").innerHTML = puntos;
+			result = true;
 		}
-		drawCharacters();
 	}
-	if(pacman.dying){
-		var deegres1 = pacman.deegres1;
-		var deegres2 = pacman.deegres2;
-		ctx.fillStyle = "rgb(255,255,0)";
-		ctx.clearRect(pacman.x - pacman.radio, pacman.y - pacman.radio, pacman.radio * 2, pacman.radio * 2);
-		ctx.beginPath();
-		ctx.arc(pacman.x, pacman.y, pacman.radio, Math.PI + deegres2, Math.PI, true);
-		ctx.lineTo(pacman.x, pacman.y);
-		ctx.fill();
-		ctx.beginPath();
-		ctx.arc(pacman.x, pacman.y, pacman.radio, 3.14, deegres1, true);
-		ctx.lineTo(pacman.x, pacman.y);
-		ctx.fill();
-		pacman.deegres1 += 0.1;
-		pacman.deegres2 -= 0.1;
-		console.log("PINTANDO PACMAN");
-		if (deegres1 > Math.PI || deegres2 < 0) {
-			pacman.resetPosition();
-			ghosts.resetPositions();
-		}
+	return result;
+}
+
+function accion() {
+	document.onkeydown = interaccion;
+	switch (statusExecution.status) {
+		case Status.PAUSE :
+
+			break;
+		case Status.RUN :
+			pacman.interaccion(tecla);
+			var posibleDot = pacman.move();
+			if (posibleDot) {
+				if(canHeEatADot()){
+					pacman.audioWaka.play();
+				}
+			} else {
+				pacman.audioWaka.pause();
+			}
+			ghosts.moveAll();
+			var deted = ghosts.detectTouchedGhost(pacman.x, pacman.y);
+			if (deted) {
+				if (pacman.eatedBigCoco) {
+					//ghostX.die
+				} else {
+					lifes.loseOne();
+					statusExecution.status = Status.DYING;
+				}
+			}
+			drawCharacters();
+			break;
+		case Status.DYING :
+			var finish = pacman.drawDie();
+			if (finish) {
+				if (lifes.lifes > 0) {
+					ghosts.resetPositions();
+					statusExecution.status = Status.PAUSE;
+				} else {
+					statusExecution.status = Status.GAMEOVER;
+				}
+			}
+			break;
+		case Status.GAMEOVER :
+
+			break;
 	}
 	window.requestAnimationFrame(accion);
-	
 }
 
 document.addEventListener("load", accion());

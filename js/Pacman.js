@@ -10,11 +10,7 @@ class Pacman {
 		this.direccion = Direction.DEFAULT;
 		this.eatedBigCoco = false;
 		this.dying = false;
-
-		this.deegres1 = 0;
-		this.deegres2 = Math.PI;
-
-
+		this.deegres = Math.PI;
 		this.audioWaka = document.getElementById("soundPacmanEating");
 	}
 
@@ -43,7 +39,23 @@ class Pacman {
 	}
 
 	drawDie() {
-		threadPacmanDie(this);
+		var finish = false;
+		ctx.fillStyle = "rgb(255,255,0)";
+		ctx.clearRect(this.x - this.radio, this.y - this.radio, this.radio * 2, this.radio * 2);
+		ctx.beginPath();
+		ctx.arc(this.x, this.y, this.radio, Math.PI + this.deegres, Math.PI, true);
+		ctx.lineTo(this.x, this.y);
+		ctx.fill();
+		ctx.beginPath();
+		ctx.arc(this.x, this.y, this.radio, 3.14,Math.PI - this.deegres, true);
+		ctx.lineTo(this.x, this.y);
+		ctx.fill();
+		this.deegres -= 0.1;
+		if (this.deegres < 0) {
+			this.resetPosition();
+			finish = true;
+		}
+		return finish;
 	}
 
 	resetPosition() {
@@ -51,8 +63,7 @@ class Pacman {
 		this.y = 705;
 		this.direccion = Direction.DEFAULT;
 		this.dying = false;
-		this.deegres1 = 0;
-		this.deegres2 = Math.PI;
+		this.deegres = Math.PI;
 	}
 
 	interaccion(key) {
@@ -93,6 +104,7 @@ class Pacman {
 	}
 
 	move() {
+		var result = false;
 		if (limit(this.direccion, this.x, this.y)) {
 			this.x += this.vx * 5;
 			this.y += this.vy * 5;
@@ -100,31 +112,13 @@ class Pacman {
 				this.x = canvas.width - 15;
 			} else if (this.x + 16 > canvas.width) {
 				this.x = 0;
-			}
-			if (estaCentrado(Direction.UP, this.x, this.y) && estaCentrado(Direction.LEFT, this.x, this.y)) {
-				var auxY = Math.trunc((this.y) / 30);
-				var auxX = Math.trunc((this.x) / 30);
-				var cell = map.arrayMapa[auxY][auxX];
-				if (cell !== 1) {
-					map.arrayMapa[auxY][auxX] = 1;
-					map.drawCocos();
-					if (cell === 3) {
-						this.eatedBigCoco = true;
-						threadPacmanEatBigDot(this);
-						puntos += 30;
-					} else {
-						puntos += 10;
-					}
-					document.getElementById("puntos").innerHTML = puntos;
-					this.audioWaka.play();
-				} else {
-					this.audioWaka.pause();
-				}
+			} else {
+				result = true;
 			}
 		} else {
 			this.direccion = Direction.DEFAULT;
-			this.audioWaka.pause();
 		}
+		return result;
 	}
 }
 
@@ -132,27 +126,4 @@ function threadPacmanEatBigDot(pac) {
 	setTimeout(function () {
 		pac.eatedBigCoco = false;
 	}, 2000);
-}
-
-function threadPacmanDie(pac) {
-	var deegres1 = 0;
-	var deegres2 = Math.PI;
-	ctx.fillStyle = "rgb(255,255,0)";
-	ctx.clearRect(pac.x - pac.radio, pac.y - pac.radio, pac.radio * 2, pac.radio * 2);
-	ctx.beginPath();
-	ctx.arc(pac.x, pac.y, pac.radio, Math.PI + deegres2, Math.PI, true);
-	ctx.lineTo(pac.x, pac.y);
-	ctx.fill();
-	ctx.beginPath();
-	ctx.arc(pac.x, pac.y, pac.radio, 3.14, deegres1, true);
-	ctx.lineTo(pac.x, pac.y);
-	ctx.fill();
-	deegres1 += 0.01;
-	deegres2 -= 0.01;
-	console.log("PINTANDO PACMAN");
-	if (deegres1 < Math.PI || deegres2 > 0) {
-		pac.dying = false;
-		deegres1 = 0;
-		deegres2 = Math.PI;
-	}
 }
