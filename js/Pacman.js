@@ -1,5 +1,11 @@
 /* global ctx, Direction, map, puntos, canvas */
 
+var PacmanStatus = {
+	KILLER: 1,
+	DYING: 2,
+	NORMAL: 0
+};
+
 class Pacman {
 	constructor() {
 		this.x = 420;
@@ -8,8 +14,7 @@ class Pacman {
 		this.vy = 0;
 		this.radio = 20;
 		this.direccion = Direction.DEFAULT;
-		this.eatedBigCoco = false;
-		this.dying = false;
+		this.status = PacmanStatus.NORMAL;
 		this.deegres = Math.PI;
 		this.audioWaka = document.getElementById("soundPacmanEating");
 	}
@@ -47,7 +52,7 @@ class Pacman {
 		ctx.lineTo(this.x, this.y);
 		ctx.fill();
 		ctx.beginPath();
-		ctx.arc(this.x, this.y, this.radio, 3.14,Math.PI - this.deegres, true);
+		ctx.arc(this.x, this.y, this.radio, Math.PI,Math.PI - this.deegres, true);
 		ctx.lineTo(this.x, this.y);
 		ctx.fill();
 		this.deegres -= 0.1;
@@ -62,8 +67,8 @@ class Pacman {
 		this.x = 420;
 		this.y = 705;
 		this.direccion = Direction.DEFAULT;
-		this.dying = false;
 		this.deegres = Math.PI;
+		this.status = PacmanStatus.NORMAL;
 	}
 
 	interaccion(key) {
@@ -124,6 +129,6 @@ class Pacman {
 
 function threadPacmanEatBigDot(pac) {
 	setTimeout(function () {
-		pac.eatedBigCoco = false;
+		this.status = PacmanStatus.NORMAL;
 	}, 2000);
 }

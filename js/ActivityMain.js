@@ -1,4 +1,4 @@
-/* global Status */
+/* global Status, PacmanStatus */
 
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
@@ -156,7 +156,7 @@ function canHeEatADot() {
 			map.arrayMapa[auxY][auxX] = 1;
 			map.drawCocos();
 			if (cell === 3) {
-				pacman.eatedBigCoco = true;
+				pacman.status = PacmanStatus.KILLER;
 				threadPacmanEatBigDot(pacman);
 				puntos += 30;
 			} else {
@@ -181,6 +181,8 @@ function accion() {
 			if (posibleDot) {
 				if(canHeEatADot()){
 					pacman.audioWaka.play();
+				} else {
+					pacman.audioWaka.pause();
 				}
 			} else {
 				pacman.audioWaka.pause();
@@ -188,11 +190,11 @@ function accion() {
 			ghosts.moveAll();
 			var deted = ghosts.detectTouchedGhost(pacman.x, pacman.y);
 			if (deted.length > 0) {
-				if (pacman.eatedBigCoco) {
-					deted.forEach(function callback(ghost, index, array) {
+				if (pacman.status === PacmanStatus.KILLER) {
+					deted.forEach(function(ghost) {
+						//MUST DIE THE GHOST
 						ghost.resetPosition(420, 345);
 					});
-					//ghostX.die
 				} else {
 					lifes.loseOne();
 					statusExecution.status = Status.DYING;
