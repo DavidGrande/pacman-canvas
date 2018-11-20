@@ -1,4 +1,4 @@
-/* global canvas */
+/* global canvas, Palette */
 
 class PacDotLayer{
 	constructor(){
@@ -17,7 +17,7 @@ class PacDotLayer{
 	
 	drawPacDots(arrayMapa, x, y) {
 		this.ctxCocoLayer.clearRect(0,0,canvas.width, canvas.height);
-		this.ctxCocoLayer.fillStyle = "#FFF";
+		this.ctxCocoLayer.fillStyle = Palette.WHITE;
 		for (var i = 1; i < y-1; i++) {
 			for (var j = 1; j < x-1; j++) {
 				var cell = arrayMapa[i][j];

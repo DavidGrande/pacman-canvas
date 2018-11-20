@@ -1,11 +1,11 @@
-/* global Direction, ctx, canvas, pacman */
+/* global Direction, ctx, canvas, pacman, Palette */
 
 class Ghosts {
 	constructor(){
-		this.ghostRed = new GhostFollower(420, 345, "#F00", 5);
-		this.ghostOrange = new GhostRandom(420, 345, "#F90", 5);
-		this.ghostGreen = new GhostFollower(420, 345, "#0F0", 2.5);
-		this.ghostPink = new GhostRandom(420, 345, "#F99", 5);
+		this.ghostRed = new GhostFollower(420, 345, Palette.RED, 5);
+		this.ghostOrange = new GhostRandom(420, 345, Palette.ORANGE, 5);
+		this.ghostGreen = new GhostFollower(420, 345, Palette.GREEN, 2.5);
+		this.ghostPink = new GhostRandom(420, 345, Palette.PINK, 5);
 	}
 	
 	drawAll(){
@@ -76,12 +76,11 @@ class Ghost {
 		ctx.lineTo(this.x - 16, this.y + 19);
 		ctx.lineTo(this.x - 16, this.y - 7);
 		ctx.fill();
-		ctx.fillStyle = "#FFF";
+		ctx.fillStyle = Palette.WHITE;
 		ctx.fillRect(this.x - 7, this.y - 8, 4, 9);
 		ctx.fillRect(this.x - 8, this.y - 7, 6, 7);
 		ctx.fillRect(this.x + 5, this.y - 8, 4, 9);
 		ctx.fillRect(this.x + 4, this.y - 7, 6, 7);
-		ctx.fillStyle = "#000";
 		ctx.fillRect(this.x - 7, this.y - 4, 2, 3);
 		ctx.fillRect(this.x + 5, this.y - 4, 2, 3);
 	}

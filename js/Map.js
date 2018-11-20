@@ -1,4 +1,4 @@
-/* global canvas */
+/* global canvas, Palette */
 
 class Map{
     constructor () {
@@ -43,11 +43,11 @@ class Map{
     
     draw() {
         /*Fondo*/
-        this.ctxGameLayer.fillStyle = "rgb(0,0,0)";
+        this.ctxGameLayer.fillStyle = Palette.BLACK;
         this.ctxGameLayer.fillRect(0, 0, canvas.width, canvas.height);
 
         /*Rectangulo de dentro*/
-        this.ctxGameLayer.fillStyle = "rgb(255,255,255)";
+        this.ctxGameLayer.fillStyle = Palette.WHITE;
         this.ctxGameLayer.fillRect(392, 376, 58, 5);
         this.ctxGameLayer.beginPath();
         this.ctxGameLayer.moveTo(315, 375);
@@ -63,7 +63,7 @@ class Map{
         this.ctxGameLayer.lineTo(525, 495);
         this.ctxGameLayer.lineTo(315, 495);
         this.ctxGameLayer.lineTo(315, 375);
-        this.ctxGameLayer.strokeStyle = "#0C28FF";
+        this.ctxGameLayer.strokeStyle = Palette.DARKBLUE;
         this.ctxGameLayer.stroke();
 
 

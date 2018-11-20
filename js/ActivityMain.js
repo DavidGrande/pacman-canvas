@@ -3,6 +3,17 @@
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
 
+var Palette = {
+	BLACK: "#000",
+	WHITE: "#FFF" ,
+	YELLOW: "#FF0" ,
+	ORANGE: "#F90",
+	RED: "#F00",
+	GREEN: "#0F0",
+	PINK: "#F99",
+	DARKBLUE: "#0C28FF"
+};
+
 var puntos = 0;
 var map = new Map();
 map.draw();

@@ -1,4 +1,4 @@
-/* global canvas */
+/* global canvas, Palette */
 
 var Status = {
 	RUN: 1,
@@ -24,12 +24,12 @@ class StatusExecution {
 				break;
 			case Status.PAUSE:
 				this.ctxInfoLayer.font = "bold 22px sans-serif";
-				this.ctxInfoLayer.fillStyle = "#FFF";
+				this.ctxInfoLayer.fillStyle = Palette.WHITE;
 				this.ctxInfoLayer.fillText("Press Space to start", 315, 530);
 				break;
 			case Status.GAMEOVER:
 				this.ctxInfoLayer.font = "bold 22px sans-serif";
-				this.ctxInfoLayer.fillStyle = "#FFF";
+				this.ctxInfoLayer.fillStyle = Palette.WHITE;
 				this.ctxInfoLayer.fillText("GAME OVER", 330, 530);
 				break;
 		}

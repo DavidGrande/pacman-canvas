@@ -1,4 +1,4 @@
-/* global ctx, Direction, map, puntos, canvas */
+/* global ctx, Direction, map, puntos, canvas, Palette */
 
 var PacmanStatus = {
 	KILLER: 1,
@@ -20,7 +20,7 @@ class Pacman {
 	}
 
 	draw() {
-		ctx.fillStyle = "rgb(255,255,0)";
+		ctx.fillStyle = Palette.YELLOW;
 		ctx.beginPath();
 		switch (this.direccion) {
 			case Direction.UP:
@@ -45,7 +45,7 @@ class Pacman {
 
 	drawDie() {
 		var finish = false;
-		ctx.fillStyle = "rgb(255,255,0)";
+		ctx.fillStyle = Palette.YELLOW;
 		ctx.clearRect(this.x - this.radio, this.y - this.radio, this.radio * 2, this.radio * 2);
 		ctx.beginPath();
 		ctx.arc(this.x, this.y, this.radio, Math.PI + this.deegres, Math.PI, true);

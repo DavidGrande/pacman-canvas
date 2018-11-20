@@ -1,3 +1,5 @@
+/* global Palette */
+
 class Life{
 	constructor(id){
 		this.y = 10;
@@ -7,7 +9,7 @@ class Life{
 		this.ctxLife = this.canvas.getContext('2d');
 	}
 	draw(){
-		this.ctxLife.fillStyle = "rgb(255,255,0)";
+		this.ctxLife.fillStyle = Palette.YELLOW;
 		this.ctxLife.beginPath();
 		this.ctxLife.arc(this.x, this.y, this.radio, 1.75 * Math.PI, Math.PI / 4, true);
 		this.ctxLife.lineTo(this.x, this.y);
