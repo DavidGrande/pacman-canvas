@@ -228,27 +228,27 @@ function accion() {
 
             break;
     }
-    //rafReference = requestAnimationFrame(accion);
 }
 
-var rafReference;
-var progress = 0;
+
+/*Control FPS*/
+var fps = 60, fpsInterval, startTime, now, then, elapsed;
+
+function startAnimating() {
+    fpsInterval = 1000 / fps;
+    then = Date.now();
+    startTime = then;
+    fpsControl();
+}
 
 function fpsControl() {
-    // only run 100 times
-    
-    if (!progress % 2) {
-accion();
-        /* do what you wanna do here */
-
-        progress++;
-        //recursively calls it self as requestAnimationFrame's callback
-        rafReference = requestAnimationFrame(fpsControl) // passed as reference
-    } else {
-        cancelAnimationFrame(rafReference)
+    requestAnimationFrame(fpsControl);
+    now = Date.now();
+    elapsed = now - then;
+    if (elapsed > fpsInterval) {
+        then = now - (elapsed % fpsInterval);
+        accion();
     }
 }
-//starting the recursion
-//requestAnimationFrame(doSomething)
 
-document.addEventListener("load", fpsControl());
+document.addEventListener("load", startAnimating());
