@@ -1,7 +1,7 @@
 /* global canvas, Palette */
 
-class Map{
-    constructor () {
+class Map {
+    constructor() {
         this.arrayMapa = [
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0],
@@ -35,12 +35,12 @@ class Map{
             [0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         ];
-		this.xLength = this.arrayMapa[0].length;
-		this.yLength = this.arrayMapa.length;
-		this.ctxGameLayer = document.getElementById('game-layer').getContext('2d', {alpha: true});
-		this.pacDotLayer = new PacDotLayer;
+        this.xLength = this.arrayMapa[0].length;
+        this.yLength = this.arrayMapa.length;
+        this.ctxGameLayer = document.getElementById('game-layer').getContext('2d', {alpha: true});
+        this.pacDotLayer = new PacDotLayer;
     }
-    
+
     draw() {
         /*Fondo*/
         this.ctxGameLayer.fillStyle = Palette.BLACK;
@@ -318,7 +318,7 @@ class Map{
         this.ctxGameLayer.quadraticCurveTo(585, 735, 591, 735);
         this.ctxGameLayer.stroke();
     }
-    
+
     roundedRect(x, y, width, height, radius) {
         this.ctxGameLayer.beginPath();
         this.ctxGameLayer.moveTo(x, y + radius);
@@ -332,7 +332,7 @@ class Map{
         this.ctxGameLayer.arcTo(x, y, x, y + radius, radius);
         this.ctxGameLayer.stroke();
     }
-	
+
     makeT(x, y) {
         this.ctxGameLayer.beginPath();
         this.ctxGameLayer.moveTo(x + 6, y);
@@ -354,8 +354,8 @@ class Map{
         this.ctxGameLayer.quadraticCurveTo(x, y, x + 6, y);
         this.ctxGameLayer.stroke();
     }
-	
-	drawCocos() {
-		this.pacDotLayer.drawPacDots(this.arrayMapa, this.xLength, this.yLength);
-	}
+
+    drawCocos() {
+        this.pacDotLayer.drawPacDots(this.arrayMapa, this.xLength, this.yLength);
+    }
 }
